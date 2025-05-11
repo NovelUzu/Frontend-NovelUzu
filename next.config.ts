@@ -1,7 +1,12 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: 'export', // para exportar como HTML estático
+  images: {
+    unoptimized: true,
+  },
+  trailingSlash: true, // importante para GitHub Pages
+  basePath: '/NovelUzu',
+  assetPrefix: '/NovelUzu',
 };
 
-export default nextConfig;
+module.exports = nextConfig;
