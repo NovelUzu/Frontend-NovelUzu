@@ -8,8 +8,10 @@ import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-export default function NovelDetailPage({ params }: { params: { id: string } }) {
-    const novelId = params.id
+import { use } from 'react'
+
+export default function NovelDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id: novelId } = use(params)
 
     return (
         <div className="flex min-h-screen flex-col">

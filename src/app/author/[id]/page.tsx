@@ -9,8 +9,11 @@ import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-export default function AuthorPage({ params }: { params: { id: string } }) {
-  const authorId = params.id
+import { use } from 'react';
+
+export default function AuthorPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const authorId = id;
 
   return (
     <div className="flex min-h-screen flex-col">

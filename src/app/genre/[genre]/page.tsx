@@ -6,9 +6,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-export default function GenrePage({ params }: { params: { genre: string } }) {
-  // Capitalizar el nombre del género para mostrarlo correctamente
-  const genreName = params.genre.charAt(0).toUpperCase() + params.genre.slice(1)
+import { use } from 'react';
+
+export default function GenrePage({ params }: { params: Promise<{ genre: string }> }) {
+  const { genre } = use(params);
+  const genreName = genre.charAt(0).toUpperCase() + genre.slice(1);
+
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -92,7 +95,7 @@ export default function GenrePage({ params }: { params: { genre: string } }) {
             </div>
           </div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {[...Array(12)].map((_, i) => (
+            {[...Array(12)].map(async (_, i) => (
               <Card key={i} className="overflow-hidden">
                 <Link href={`/novel/${i + 1}`}>
                   <div className="relative">
@@ -112,13 +115,13 @@ export default function GenrePage({ params }: { params: { genre: string } }) {
                 <CardHeader className="p-4">
                   <CardTitle className="line-clamp-1 text-base">
                     <Link href={`/novel/${i + 1}`}>
-                      {params.genre === "fantasia" || params.genre === "fantasy"
+                      {(await params).genre === "fantasia" || (await params).genre === "fantasy"
                         ? i % 3 === 0
                           ? "El Reino de los Dragones"
                           : i % 3 === 1
                             ? "La Torre del Mago"
                             : "El Último Hechicero"
-                        : params.genre === "accion" || params.genre === "action"
+                        : (await params).genre === "accion" || (await params).genre === "action"
                           ? i % 3 === 0
                             ? "Guerrero Inmortal"
                             : i % 3 === 1

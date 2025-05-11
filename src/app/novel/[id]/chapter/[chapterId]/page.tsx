@@ -11,9 +11,9 @@ import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Slider } from "@/components/ui/slider"
 
-export default function ChapterPage({ params }: { params: { id: string; chapterId: string } }) {
-    const novelId = params.id
-    const chapterId = params.chapterId
+import { use } from 'react'
+export default function ChapterPage({ params }: { params: Promise<{ id: string; chapterId: string }> }) {
+    const { id: novelId, chapterId } = use(params)
     const [fontSize, setFontSize] = useState(16)
     const [theme, setTheme] = useState<"light" | "dark" | "sepia">("light")
 

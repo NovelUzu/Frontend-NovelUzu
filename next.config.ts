@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export', // para exportar como HTML estático
   images: {
     unoptimized: true,
   },
