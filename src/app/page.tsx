@@ -1,46 +1,19 @@
 import Link from "next/link"
 import Image from "next/image"
-import { BookOpen, ChevronRight, Clock, FlameIcon as Fire, Star } from "lucide-react"
+import { ChevronRight, Clock, FlameIcon as Fire, Star } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { SiteFooter } from "@/components/site-footer"
+import { SiteHeader } from "@/components/site-header"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export default function HomePage() {
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center">
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-            <BookOpen className="h-6 w-6" />
-            <span>NovelUzu</span>
-          </Link>
-          <nav className="ml-auto flex gap-4 sm:gap-6">
-            <Link href="/explore" className="text-sm font-medium">
-              Explorar
-            </Link>
-            <Link href="/rankings" className="text-sm font-medium">
-              Rankings
-            </Link>
-            <Link href="/genres" className="text-sm font-medium">
-              Géneros
-            </Link>
-            <Link href="/latest" className="text-sm font-medium">
-              Novedades
-            </Link>
-          </nav>
-          <div className="ml-4 flex items-center gap-2">
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/login">Iniciar Sesión</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link href="/register">Registrarse</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted/40">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted/40 dark:bg-muted/10">
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px]">
               <div className="flex flex-col justify-center space-y-4">
@@ -231,7 +204,7 @@ export default function HomePage() {
             </Tabs>
           </div>
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted/40">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted/40 dark:bg-muted/10">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
@@ -266,28 +239,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-      <footer className="w-full border-t bg-background py-6">
-        <div className="container flex flex-col items-center justify-between gap-4 px-4 md:flex-row md:px-6">
-          <div className="flex items-center gap-2">
-            <BookOpen className="h-5 w-5" />
-            <span className="text-lg font-bold">NovelUzu</span>
-          </div>
-          <p className="text-center text-sm text-muted-foreground md:text-left">
-            &copy; {new Date().getFullYear()} NovelUzu. Todos los derechos reservados.
-          </p>
-          <div className="flex gap-4">
-            <Link href="/terms" className="text-sm text-muted-foreground hover:underline">
-              Términos
-            </Link>
-            <Link href="/privacy" className="text-sm text-muted-foreground hover:underline">
-              Privacidad
-            </Link>
-            <Link href="/contact" className="text-sm text-muted-foreground hover:underline">
-              Contacto
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }
