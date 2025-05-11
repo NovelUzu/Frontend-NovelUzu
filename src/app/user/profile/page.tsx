@@ -64,10 +64,12 @@ export default function UserProfilePage() {
                                 </div>
                             </div>
                         </div>
-                        <Button variant="outline" size="sm" className="gap-2">
-                            <Settings className="h-4 w-4" />
-                            Editar Perfil
-                        </Button>
+                        <Link href="/user/edit-profile">
+                            <Button variant="outline" size="sm" className="gap-2">
+                                <Settings className="h-4 w-4" />
+                                Editar Perfil
+                            </Button>
+                        </Link>
                     </div>
                     <Tabs defaultValue="biblioteca" className="w-full">
                         <TabsList className="w-full justify-start">
