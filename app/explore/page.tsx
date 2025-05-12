@@ -1,0 +1,211 @@
+import Link from "next/link"
+import Image from "next/image"
+import { BookOpen, Filter, Moon, Search, Star, Sun } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { SiteHeader } from "@/components/site-header"
+
+export default function ExplorePage() {
+  return (
+    <div className="flex min-h-screen flex-col">
+      <SiteHeader />
+
+      <main className="flex-1">
+        <div className="container px-3 py-4 sm:px-4 sm:py-6 md:px-6 md:py-8 lg:py-12">
+          <div className="mb-4 sm:mb-6 md:mb-8 space-y-2 sm:space-y-4">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight md:text-4xl">Explorar Novelas</h1>
+            <p className="text-sm sm:text-base text-muted-foreground">
+              Descubre nuevas historias, filtra por géneros y encuentra tu próxima lectura favorita.
+            </p>
+          </div>
+
+          {/* Barra de búsqueda y filtros responsivos */}
+          <div className="mb-4 sm:mb-6 md:mb-8 flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input placeholder="Buscar novelas..." className="pl-10" />
+            </div>
+            <div className="flex gap-2">
+              <Select defaultValue="all">
+                <SelectTrigger className="w-full sm:w-[180px]">
+                  <SelectValue placeholder="Estado" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos</SelectItem>
+                  <SelectItem value="ongoing">En progreso</SelectItem>
+                  <SelectItem value="completed">Completada</SelectItem>
+                  <SelectItem value="hiatus">En pausa</SelectItem>
+                </SelectContent>
+              </Select>
+              <Button variant="outline" className="gap-1 sm:gap-2 px-2 sm:px-3">
+                <Filter className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                <span className="text-xs sm:text-sm">Filtros</span>
+              </Button>
+            </div>
+          </div>
+
+          {/* Tabs responsivos con scroll horizontal en móvil */}
+          <div className="mb-4 sm:mb-6 md:mb-8 overflow-x-auto pb-2">
+            <Tabs defaultValue="all" className="w-full">
+              <TabsList className="w-max min-w-full">
+                <TabsTrigger value="all" className="text-xs sm:text-sm">
+                  Todos
+                </TabsTrigger>
+                <TabsTrigger value="fantasy" className="text-xs sm:text-sm">
+                  Fantasía
+                </TabsTrigger>
+                <TabsTrigger value="action" className="text-xs sm:text-sm">
+                  Acción
+                </TabsTrigger>
+                <TabsTrigger value="romance" className="text-xs sm:text-sm">
+                  Romance
+                </TabsTrigger>
+                <TabsTrigger value="scifi" className="text-xs sm:text-sm">
+                  Ciencia Ficción
+                </TabsTrigger>
+                <TabsTrigger value="drama" className="text-xs sm:text-sm">
+                  Drama
+                </TabsTrigger>
+              </TabsList>
+
+              {/* Contenido de las tabs con grid responsivo */}
+              <TabsContent value="all" className="mt-4 sm:mt-6">
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                  {[...Array(16)].map((_, i) => (
+                    <Card key={i} className="overflow-hidden border">
+                      <Link href={`/novel/${i + 1}`}>
+                        <div className="relative">
+                          <Image
+                            src={`/placeholder.jpeg?height=240&width=180&text=Novela ${i + 1}`}
+                            width={180}
+                            height={240}
+                            alt={`Novela ${i + 1}`}
+                            className="w-full object-cover transition-all hover:scale-105"
+                          />
+                          <div className="absolute top-1 right-1 sm:top-2 sm:right-2 flex items-center gap-0.5 sm:gap-1 rounded-md bg-black/60 px-1.5 py-0.5 sm:px-2 sm:py-1 text-[10px] sm:text-xs text-white">
+                            <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3 fill-yellow-400 text-yellow-400" />
+                            <span>4.{7 - (i % 3)}</span>
+                          </div>
+                        </div>
+                      </Link>
+                      <CardHeader className="p-2 sm:p-3 md:p-4">
+                        <CardTitle className="line-clamp-1 text-xs sm:text-sm md:text-base">
+                          <Link href={`/novel/${i + 1}`}>
+                            {i % 3 === 0
+                              ? "El Ascenso del Héroe Legendario"
+                              : i % 3 === 1
+                                ? "Crónicas del Reino Olvidado"
+                                : "El Último Hechicero"}{" "}
+                            {i + 1}
+                          </Link>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="hidden sm:block p-3 pt-0 md:p-4 md:pt-0">
+                        <p className="line-clamp-2 text-xs text-muted-foreground">
+                          {i % 3 === 0
+                            ? "Un joven ordinario descubre que tiene poderes extraordinarios y debe enfrentarse a fuerzas oscuras."
+                            : i % 3 === 1
+                              ? "En un mundo de magia y misterio, una joven princesa debe recuperar su trono usurpado."
+                              : "La historia de un poderoso hechicero que debe enfrentarse a su destino y salvar a la humanidad."}
+                        </p>
+                      </CardContent>
+                      <CardFooter className="flex items-center justify-between p-2 pt-0 sm:p-3 sm:pt-0 md:p-4 md:pt-0">
+                        <div className="flex flex-wrap gap-1">
+                          <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] sm:px-2 sm:py-1 sm:text-xs">
+                            {i % 3 === 0 ? "Fantasía" : i % 3 === 1 ? "Aventura" : "Magia"}
+                          </span>
+                          <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] sm:px-2 sm:py-1 sm:text-xs">
+                            {i % 3 === 0 ? "Acción" : i % 3 === 1 ? "Drama" : "Misterio"}
+                          </span>
+                        </div>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+                <div className="mt-6 sm:mt-8 flex justify-center">
+                  <Button variant="outline">Cargar más</Button>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="fantasy" className="mt-4 sm:mt-6">
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                  {[...Array(8)].map((_, i) => (
+                    <Card key={i} className="overflow-hidden border">
+                      <Link href={`/novel/${i + 20}`}>
+                        <div className="relative">
+                          <Image
+                            src={`/placeholder.jpeg?height=240&width=180&text=Fantasía ${i + 1}`}
+                            width={180}
+                            height={240}
+                            alt={`Novela de Fantasía ${i + 1}`}
+                            className="w-full object-cover transition-all hover:scale-105"
+                          />
+                          <div className="absolute top-1 right-1 sm:top-2 sm:right-2 flex items-center gap-0.5 sm:gap-1 rounded-md bg-black/60 px-1.5 py-0.5 sm:px-2 sm:py-1 text-[10px] sm:text-xs text-white">
+                            <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3 fill-yellow-400 text-yellow-400" />
+                            <span>4.{8 - (i % 2)}</span>
+                          </div>
+                        </div>
+                      </Link>
+                      <CardHeader className="p-2 sm:p-3 md:p-4">
+                        <CardTitle className="line-clamp-1 text-xs sm:text-sm md:text-base">
+                          <Link href={`/novel/${i + 20}`}>
+                            {i % 2 === 0 ? "El Reino de los Dragones" : "La Torre del Mago"} {i + 1}
+                          </Link>
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="hidden sm:block p-3 pt-0 md:p-4 md:pt-0">
+                        <p className="line-clamp-2 text-xs text-muted-foreground">
+                          {i % 2 === 0
+                            ? "En un mundo donde los dragones gobiernan los cielos, un joven descubre que puede comunicarse con ellos."
+                            : "Un aprendiz de mago debe ascender por los niveles de una misteriosa torre para convertirse en un verdadero hechicero."}
+                        </p>
+                      </CardContent>
+                      <CardFooter className="flex items-center justify-between p-2 pt-0 sm:p-3 sm:pt-0 md:p-4 md:pt-0">
+                        <div className="flex flex-wrap gap-1">
+                          <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] sm:px-2 sm:py-1 sm:text-xs">
+                            Fantasía
+                          </span>
+                          <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] sm:px-2 sm:py-1 sm:text-xs">
+                            {i % 2 === 0 ? "Dragones" : "Magia"}
+                          </span>
+                        </div>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer responsivo */}
+      <footer className="w-full border-t bg-background py-4 sm:py-6">
+        <div className="container flex flex-col items-center justify-between gap-2 sm:gap-4 px-3 sm:px-4 md:flex-row md:px-6">
+          <div className="flex items-center gap-2">
+            <BookOpen className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="text-base sm:text-lg font-bold">WebNovelApp</span>
+          </div>
+          <p className="text-center text-xs sm:text-sm text-muted-foreground md:text-left">
+            &copy; {new Date().getFullYear()} WebNovelApp. Todos los derechos reservados.
+          </p>
+          <div className="flex gap-3 sm:gap-4">
+            <Link href="/terms" className="text-xs sm:text-sm text-muted-foreground hover:underline">
+              Términos
+            </Link>
+            <Link href="/privacy" className="text-xs sm:text-sm text-muted-foreground hover:underline">
+              Privacidad
+            </Link>
+            <Link href="/contact" className="text-xs sm:text-sm text-muted-foreground hover:underline">
+              Contacto
+            </Link>
+          </div>
+        </div>
+      </footer>
+    </div>
+  )
+}

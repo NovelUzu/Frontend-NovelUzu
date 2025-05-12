@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 25% 97%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 262 83% 58%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 220 14% 90%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 8% 46%;
+
+    --accent: 262 83% 96%;
+    --accent-foreground: 262 83% 28%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 262 83% 58%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 14%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 14%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 262 83% 58%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 217 32% 17%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 32% 17%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 217 32% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 32% 17%;
+    --input: 217 32% 17%;
+    --ring: 262 83% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Estilos personalizados para mejorar la experiencia visual */
+.genre-card {
+  @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+}
+
+.novel-card {
+  @apply transition-all duration-300 hover:shadow-md;
+}
+
+.novel-cover {
+  @apply transition-transform duration-300;
+}
+
+.novel-card:hover .novel-cover {
+  @apply scale-105;
+}
+
+/* Ocultar scrollbar pero mantener funcionalidad */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* Gradientes para géneros */
+.gradient-fantasy {
+  @apply bg-gradient-to-r from-fantasy-dark to-fantasy;
+}
+
+.gradient-action {
+  @apply bg-gradient-to-r from-action-dark to-action;
+}
+
+.gradient-romance {
+  @apply bg-gradient-to-r from-romance-dark to-romance;
+}
+
+.gradient-scifi {
+  @apply bg-gradient-to-r from-scifi-dark to-scifi;
+}
+
+.gradient-adventure {
+  @apply bg-gradient-to-r from-adventure-dark to-adventure;
+}
+
+.gradient-mystery {
+  @apply bg-gradient-to-r from-mystery-dark to-mystery;
+}
+
+.gradient-drama {
+  @apply bg-gradient-to-r from-drama-dark to-drama;
+}
+
+.gradient-horror {
+  @apply bg-gradient-to-r from-horror-dark to-horror;
+}
