@@ -1,17 +1,9 @@
-/**
- * Página de perfil de usuario
- *
- * Esta página muestra:
- * - Información del perfil del usuario
- * - Biblioteca personal con novelas guardadas
- * - Historial de lectura
- * - Reseñas escritas por el usuario
- * - Novelas favoritas
- *
- * Se adapta a diferentes tamaños de pantalla reorganizando el contenido
- */
+"use client"
+
+import { useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { BookOpen, Clock, Heart, Settings, Star } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -19,58 +11,53 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { SiteHeader } from "@/components/site-header"
+import { SiteFooter } from "@/components/site-footer"
+import { useAuth } from "@/lib/auth-context"
 
 export default function UserProfilePage() {
+  const router = useRouter()
+  const { user, isAuthenticated, isLoading } = useAuth()
+
+  // Redirigir a login si no está autenticado
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push("/login")
+    }
+  }, [isLoading, isAuthenticated, router])
+
+  // Mostrar pantalla de carga mientras se verifica la autenticación
+  if (isLoading || !isAuthenticated) {
+    return (
+      <div className="flex min-h-screen flex-col">
+        <SiteHeader />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+            <p className="mt-4 text-muted-foreground">Cargando perfil...</p>
+          </div>
+        </main>
+        <SiteFooter />
+      </div>
+    )
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
-      {/* Encabezado con navegación */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center">
-          {/* Logo y nombre del sitio - Versión compacta en móvil */}
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-            <BookOpen className="h-6 w-6" />
-            <span className="hidden sm:inline">WebNovelApp</span>
-          </Link>
-
-          {/* Navegación principal - Scroll horizontal en móvil */}
-          <nav className="ml-auto flex overflow-x-auto pb-1 gap-4 sm:gap-6 hide-scrollbar">
-            <Link href="/explore" className="text-sm font-medium whitespace-nowrap">
-              Explorar
-            </Link>
-            <Link href="/rankings" className="text-sm font-medium whitespace-nowrap">
-              Rankings
-            </Link>
-            <Link href="/genres" className="text-sm font-medium whitespace-nowrap">
-              Géneros
-            </Link>
-            <Link href="/latest" className="text-sm font-medium whitespace-nowrap">
-              Novedades
-            </Link>
-          </nav>
-
-          {/* Avatar del usuario */}
-          <div className="ml-4 flex items-center gap-2">
-            <Avatar>
-              <AvatarImage src="/placeholder.jpeg?height=32&width=32&text=U" alt="@usuario" />
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
-          </div>
-        </div>
-      </header>
-
+      <SiteHeader />
       <main className="flex-1">
         <div className="container px-4 py-6 md:px-6 md:py-12">
           {/* Sección de perfil - Reorganizada para móvil y desktop */}
           <div className="mb-8 flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:gap-8">
             {/* Avatar del usuario */}
             <Avatar className="h-20 w-20 sm:h-24 sm:w-24 border-4 border-background">
-              <AvatarImage src="/placeholder.jpeg?height=96&width=96&text=U" alt="@usuario" />
-              <AvatarFallback>U</AvatarFallback>
+              <AvatarImage src={user?.avatar || "/placeholder.jpeg"} alt={user?.username} />
+              <AvatarFallback>{user?.username?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
             </Avatar>
 
             {/* Información del perfil */}
             <div className="flex flex-1 flex-col items-center gap-2 text-center sm:items-start sm:text-left">
-              <h1 className="text-2xl sm:text-3xl font-bold">LectorÁvido</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold">{user?.username}</h1>
               <p className="text-sm text-muted-foreground">Miembro desde Mayo 2023</p>
 
               {/* Estadísticas del usuario - Diseño flexible */}
@@ -91,13 +78,15 @@ export default function UserProfilePage() {
             </div>
 
             {/* Botón de editar perfil */}
-            <Button variant="outline" size="sm" className="gap-2">
-              <Settings className="h-4 w-4" />
-              Editar Perfil
+            <Button variant="outline" size="sm" className="gap-2" asChild>
+              <Link href="/user/edit-profile">
+                <Settings className="h-4 w-4" />
+                Editar Perfil
+              </Link>
             </Button>
           </div>
 
-          {/* Tabs de contenido - Con scroll horizontal en móvil */}
+          {/* Tabs de contenido - Con scroll horizontal en móviles */}
           <Tabs defaultValue="biblioteca" className="w-full">
             <TabsList className="w-full justify-start overflow-x-auto pb-1">
               <TabsTrigger value="biblioteca">Biblioteca</TabsTrigger>
@@ -388,30 +377,7 @@ export default function UserProfilePage() {
           </Tabs>
         </div>
       </main>
-
-      {/* Pie de página */}
-      <footer className="w-full border-t bg-background py-6">
-        <div className="container flex flex-col items-center justify-between gap-4 px-4 md:flex-row md:px-6">
-          <div className="flex items-center gap-2">
-            <BookOpen className="h-5 w-5" />
-            <span className="text-lg font-bold">WebNovelApp</span>
-          </div>
-          <p className="text-center text-xs sm:text-sm text-muted-foreground md:text-left">
-            &copy; {new Date().getFullYear()} WebNovelApp. Todos los derechos reservados.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/terms" className="text-xs sm:text-sm text-muted-foreground hover:underline">
-              Términos
-            </Link>
-            <Link href="/privacy" className="text-xs sm:text-sm text-muted-foreground hover:underline">
-              Privacidad
-            </Link>
-            <Link href="/contact" className="text-xs sm:text-sm text-muted-foreground hover:underline">
-              Contacto
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }

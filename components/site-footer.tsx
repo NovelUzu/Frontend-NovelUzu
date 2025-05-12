@@ -12,13 +12,13 @@ export function SiteFooter() {
         <div className="flex items-center gap-2">
           <BookOpen className="h-5 w-5 text-primary" />
           <span className="text-lg font-bold bg-gradient-to-r from-primary to-fantasy bg-clip-text text-transparent">
-            WebNovelApp
+            NovelUzu
           </span>
         </div>
 
         {/* Información de copyright - Centrada en móvil, alineada a la izquierda en desktop */}
         <p className="text-center text-xs sm:text-sm text-muted-foreground md:text-left">
-          &copy; {currentYear} WebNovelApp. Todos los derechos reservados.
+          &copy; {currentYear} NovelUzu. Todos los derechos reservados.
         </p>
 
         {/* Enlaces de pie de página - Adaptados para mejor visualización en móvil */}

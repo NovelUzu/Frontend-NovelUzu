@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { BookOpen, Filter, Moon, Search, Star, Sun } from "lucide-react"
+import { BookOpen, ChevronRight, Filter, Moon, Search, Star, Sun } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SiteHeader } from "@/components/site-header"
+import { SiteFooter } from "@/components/site-footer"
 
 export default function ExplorePage() {
   return (
@@ -15,10 +16,17 @@ export default function ExplorePage() {
       <SiteHeader />
 
       <main className="flex-1">
-        <div className="container px-3 py-4 sm:px-4 sm:py-6 md:px-6 md:py-8 lg:py-12">
-          <div className="mb-4 sm:mb-6 md:mb-8 space-y-2 sm:space-y-4">
-            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight md:text-4xl">Explorar Novelas</h1>
-            <p className="text-sm sm:text-base text-muted-foreground">
+        <div className="container px-4 py-8 md:px-6 md:py-12">
+          <div className="mb-8">
+            <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+              <Link href="/" className="hover:underline">
+                Inicio
+              </Link>
+              <ChevronRight className="h-4 w-4" />
+              <span className="font-medium text-foreground">Explorar</span>
+            </div>
+            <h1 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">Explorar Novelas</h1>
+            <p className="mt-2 text-muted-foreground">
               Descubre nuevas historias, filtra por géneros y encuentra tu próxima lectura favorita.
             </p>
           </div>
@@ -183,29 +191,7 @@ export default function ExplorePage() {
         </div>
       </main>
 
-      {/* Footer responsivo */}
-      <footer className="w-full border-t bg-background py-4 sm:py-6">
-        <div className="container flex flex-col items-center justify-between gap-2 sm:gap-4 px-3 sm:px-4 md:flex-row md:px-6">
-          <div className="flex items-center gap-2">
-            <BookOpen className="h-4 w-4 sm:h-5 sm:w-5" />
-            <span className="text-base sm:text-lg font-bold">WebNovelApp</span>
-          </div>
-          <p className="text-center text-xs sm:text-sm text-muted-foreground md:text-left">
-            &copy; {new Date().getFullYear()} WebNovelApp. Todos los derechos reservados.
-          </p>
-          <div className="flex gap-3 sm:gap-4">
-            <Link href="/terms" className="text-xs sm:text-sm text-muted-foreground hover:underline">
-              Términos
-            </Link>
-            <Link href="/privacy" className="text-xs sm:text-sm text-muted-foreground hover:underline">
-              Privacidad
-            </Link>
-            <Link href="/contact" className="text-xs sm:text-sm text-muted-foreground hover:underline">
-              Contacto
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }

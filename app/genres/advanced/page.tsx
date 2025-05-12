@@ -70,8 +70,8 @@ export default function AdvancedSearchPage() {
                 Inicio
               </Link>
               <ChevronRight className="h-4 w-4" />
-              <Link href="/search" className="hover:underline">
-                Búsqueda
+              <Link href="/genres" className="hover:underline">
+                Géneros
               </Link>
               <ChevronRight className="h-4 w-4" />
               <span className="font-medium text-foreground">Búsqueda Avanzada</span>

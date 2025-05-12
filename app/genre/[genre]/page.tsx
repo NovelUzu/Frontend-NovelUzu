@@ -1,49 +1,44 @@
 import Link from "next/link"
 import Image from "next/image"
-import { BookOpen, ChevronRight, Star } from "lucide-react"
+import { ChevronRight, Star } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { SiteHeader } from "@/components/site-header"
+import { SiteFooter } from "@/components/site-footer"
 
-import { use } from 'react';
+import { use } from 'react'
+
+// Función para desnormalizar las URLs (convertir a nombre legible)
+function denormalizeGenre(genre: string): string {
+  // Mapeo de URLs normalizadas a nombres legibles
+  const genreMap: Record<string, string> = {
+    fantasia: "Fantasía",
+    accion: "Acción",
+    "ciencia-ficcion": "Ciencia Ficción",
+    romance: "Romance",
+    aventura: "Aventura",
+    misterio: "Misterio",
+    drama: "Drama",
+    horror: "Horror",
+    historico: "Histórico",
+    comedia: "Comedia",
+    sobrenatural: "Sobrenatural",
+    "artes-marciales": "Artes Marciales",
+  }
+
+  return genreMap[genre] || genre.charAt(0).toUpperCase() + genre.slice(1).replace(/-/g, " ")
+}
 
 export default function GenrePage({ params }: { params: Promise<{ genre: string }> }) {
-  const { genre } = use(params);
-  const genreName = genre.charAt(0).toUpperCase() + genre.slice(1);
+  // Obtener el nombre legible del género
+  var { genre: genreName } = use(params)
+  genreName = denormalizeGenre(genreName)
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center">
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-            <BookOpen className="h-6 w-6" />
-            <span>WebNovelApp</span>
-          </Link>
-          <nav className="ml-auto flex gap-4 sm:gap-6">
-            <Link href="/explore" className="text-sm font-medium">
-              Explorar
-            </Link>
-            <Link href="/rankings" className="text-sm font-medium">
-              Rankings
-            </Link>
-            <Link href="/genres" className="text-sm font-medium">
-              Géneros
-            </Link>
-            <Link href="/latest" className="text-sm font-medium">
-              Novedades
-            </Link>
-          </nav>
-          <div className="ml-4 flex items-center gap-2">
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/login">Iniciar Sesión</Link>
-            </Button>
-            <Button size="sm" asChild>
-              <Link href="/register">Registrarse</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
       <main className="flex-1">
         <div className="container px-4 py-8 md:px-6 md:py-12">
           <div className="mb-8">
@@ -160,28 +155,7 @@ export default function GenrePage({ params }: { params: Promise<{ genre: string 
           </div>
         </div>
       </main>
-      <footer className="w-full border-t bg-background py-6">
-        <div className="container flex flex-col items-center justify-between gap-4 px-4 md:flex-row md:px-6">
-          <div className="flex items-center gap-2">
-            <BookOpen className="h-5 w-5" />
-            <span className="text-lg font-bold">WebNovelApp</span>
-          </div>
-          <p className="text-center text-sm text-muted-foreground md:text-left">
-            &copy; {new Date().getFullYear()} WebNovelApp. Todos los derechos reservados.
-          </p>
-          <div className="flex gap-4">
-            <Link href="/terms" className="text-sm text-muted-foreground hover:underline">
-              Términos
-            </Link>
-            <Link href="/privacy" className="text-sm text-muted-foreground hover:underline">
-              Privacidad
-            </Link>
-            <Link href="/contact" className="text-sm text-muted-foreground hover:underline">
-              Contacto
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }

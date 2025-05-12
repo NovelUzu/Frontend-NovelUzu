@@ -1,5 +1,5 @@
 /**
- * Página principal de WebNovelApp
+ * Página principal de NovelUzu
  *
  * Esta página muestra:
  * - Hero section con llamada a la acción
@@ -15,6 +15,17 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+// Función para normalizar las URLs (eliminar tildes y caracteres especiales)
+function normalizeUrl(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // Eliminar acentos
+    .replace(/[^\w\s-]/g, "") // Eliminar caracteres especiales
+    .replace(/\s+/g, "-") // Reemplazar espacios con guiones
+    .replace(/-+/g, "-") // Eliminar guiones duplicados
+}
 
 export default function HomePage() {
   return (
@@ -59,14 +70,19 @@ export default function HomePage() {
                 </div>
               </div>
               {/* Imagen responsiva con tamaños optimizados */}
-              <div className="relative aspect-video overflow-hidden rounded-xl sm:w-full lg:order-last">
+              <div className="relative aspect-video overflow-hidden rounded-xl sm:w-full lg:order-last bg-black">
                 <Image
-                  src="/placeholder.jpeg?height=550&width=450"
+                  src="/placeholder.png?height=550&width=450"
                   width={550}
                   height={450}
                   alt="Imagen destacada de novela"
-                  className="object-cover object-center"
-                  priority // Carga prioritaria para LCP (Largest Contentful Paint)
+                  className="object-cover object-center w-full h-full"
+                  priority
+                  style={{
+                    objectFit: 'cover',
+                    width: '100%',
+                    height: '100%'
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-r from-fantasy/30 to-transparent"></div>
               </div>
@@ -270,7 +286,7 @@ export default function HomePage() {
                 { name: "Sobrenatural", color: "gradient-mystery" },
                 { name: "Artes Marciales", color: "gradient-action" },
               ].map((genre) => (
-                <Link href={`/genre/${genre.name.toLowerCase()}`} key={genre.name}>
+                <Link href={`/genre/${normalizeUrl(genre.name)}`} key={genre.name}>
                   <div
                     className={`flex h-20 sm:h-24 items-center justify-center rounded-lg ${genre.color} p-4 text-center shadow-sm transition-all hover:shadow-md hover:-translate-y-1 text-white`}
                   >

@@ -1,10 +1,3 @@
-/**
- * Página de géneros literarios
- *
- * Esta página muestra todos los géneros disponibles en la plataforma,
- * con una paleta de colores personalizada para cada género y un diseño
- * visualmente atractivo que facilita la exploración.
- */
 import Link from "next/link"
 import Image from "next/image"
 import { ChevronRight, Search, Star } from "lucide-react"
@@ -15,8 +8,19 @@ import { Input } from "@/components/ui/input"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 
+// Función para normalizar las URLs (eliminar tildes y caracteres especiales)
+function normalizeUrl(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // Eliminar acentos
+    .replace(/[^\w\s-]/g, "") // Eliminar caracteres especiales
+    .replace(/\s+/g, "-") // Reemplazar espacios con guiones
+    .replace(/-+/g, "-") // Eliminar guiones duplicados
+}
+
 export default function GenresPage() {
-  // Lista de géneros con sus descripciones, imágenes y colores personalizados
+  // Lista de géneros con sus descripciones e imágenes
   const genres = [
     {
       id: "fantasia",
@@ -24,7 +28,7 @@ export default function GenresPage() {
       description: "Mundos mágicos, criaturas míticas y poderes sobrenaturales.",
       count: 245,
       popular: ["El Ascenso del Héroe Legendario", "El Reino de los Dragones", "La Torre del Mago"],
-      gradient: "gradient-fantasy",
+      bgColor: "bg-purple-600",
       textColor: "text-white",
     },
     {
@@ -33,7 +37,7 @@ export default function GenresPage() {
       description: "Combates intensos, aventuras emocionantes y héroes valientes.",
       count: 189,
       popular: ["Guerrero Inmortal", "El Puño del Norte", "Cazador de Demonios"],
-      gradient: "gradient-action",
+      bgColor: "bg-red-600",
       textColor: "text-white",
     },
     {
@@ -42,7 +46,7 @@ export default function GenresPage() {
       description: "Historias de amor, relaciones y emociones profundas.",
       count: 210,
       popular: ["Corazones Entrelazados", "El Príncipe y la Plebeya", "Amor en Tiempos de Guerra"],
-      gradient: "gradient-romance",
+      bgColor: "bg-pink-600",
       textColor: "text-white",
     },
     {
@@ -51,7 +55,7 @@ export default function GenresPage() {
       description: "Tecnología futurista, viajes espaciales y realidades alternativas.",
       count: 156,
       popular: ["Colonias Estelares", "Inteligencia Artificial", "El Último Astronauta"],
-      gradient: "gradient-scifi",
+      bgColor: "bg-cyan-600",
       textColor: "text-white",
     },
     {
@@ -60,7 +64,7 @@ export default function GenresPage() {
       description: "Viajes épicos, búsquedas peligrosas y descubrimientos asombrosos.",
       count: 178,
       popular: ["La Búsqueda del Tesoro Perdido", "Exploradores del Abismo", "La Isla Misteriosa"],
-      gradient: "gradient-adventure",
+      bgColor: "bg-emerald-600",
       textColor: "text-white",
     },
     {
@@ -69,7 +73,7 @@ export default function GenresPage() {
       description: "Enigmas por resolver, crímenes ocultos y secretos oscuros.",
       count: 132,
       popular: ["El Detective Nocturno", "Secretos Familiares", "La Mansión de los Enigmas"],
-      gradient: "gradient-mystery",
+      bgColor: "bg-violet-600",
       textColor: "text-white",
     },
     {
@@ -78,7 +82,7 @@ export default function GenresPage() {
       description: "Conflictos emocionales, relaciones complejas y dilemas morales.",
       count: 145,
       popular: ["Vidas Cruzadas", "El Peso del Pasado", "Decisiones Difíciles"],
-      gradient: "gradient-drama",
+      bgColor: "bg-amber-600",
       textColor: "text-white",
     },
     {
@@ -87,7 +91,7 @@ export default function GenresPage() {
       description: "Terror psicológico, criaturas aterradoras y situaciones escalofriantes.",
       count: 98,
       popular: ["La Casa Maldita", "Susurros en la Oscuridad", "El Bosque de los Lamentos"],
-      gradient: "gradient-horror",
+      bgColor: "bg-slate-800",
       textColor: "text-white",
     },
     {
@@ -96,7 +100,7 @@ export default function GenresPage() {
       description: "Épocas pasadas, eventos históricos y personajes de antaño.",
       count: 87,
       popular: ["El Samurái Errante", "Reinas y Espadas", "La Caída del Imperio"],
-      gradient: "gradient-drama",
+      bgColor: "bg-amber-700",
       textColor: "text-white",
     },
     {
@@ -105,7 +109,7 @@ export default function GenresPage() {
       description: "Situaciones divertidas, personajes ocurrentes y humor constante.",
       count: 112,
       popular: ["Desastres Cotidianos", "El Mago Torpe", "Aventuras Disparatadas"],
-      gradient: "gradient-adventure",
+      bgColor: "bg-yellow-500",
       textColor: "text-white",
     },
     {
@@ -114,7 +118,7 @@ export default function GenresPage() {
       description: "Fenómenos inexplicables, poderes ocultos y seres extraordinarios.",
       count: 124,
       popular: ["Médium Reluctante", "El Chico que Veía Fantasmas", "Poderes Ocultos"],
-      gradient: "gradient-mystery",
+      bgColor: "bg-indigo-600",
       textColor: "text-white",
     },
     {
@@ -123,7 +127,7 @@ export default function GenresPage() {
       description: "Técnicas de combate, cultivo de poder y torneos de habilidad.",
       count: 93,
       popular: ["El Camino del Puño", "Maestro de las Cinco Técnicas", "Ascensión del Discípulo"],
-      gradient: "gradient-action",
+      bgColor: "bg-red-700",
       textColor: "text-white",
     },
   ]
@@ -158,9 +162,9 @@ export default function GenresPage() {
           {/* Grid de géneros con colores personalizados */}
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {genres.map((genre) => (
-              <Link key={genre.id} href={`/genre/${genre.id}`} className="group">
-                <Card className="h-full overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1 genre-card">
-                  <div className={`${genre.gradient} p-6 ${genre.textColor}`}>
+              <Link key={genre.id} href={`/genre/${normalizeUrl(genre.name)}`} className="group">
+                <Card className="h-full overflow-hidden">
+                  <div className={`${genre.bgColor} p-6 ${genre.textColor}`}>
                     <h2 className="text-2xl font-bold">{genre.name}</h2>
                     <p className="mt-2 text-sm text-white/90">{genre.description}</p>
                     <div className="mt-2 text-sm font-medium">{genre.count} novelas</div>
@@ -197,13 +201,11 @@ export default function GenresPage() {
                 <div key={genre.id}>
                   <div className="mb-4 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div
-                        className={`w-4 h-4 rounded-full ${genre.id === "fantasia" ? "bg-fantasy" : genre.id === "accion" ? "bg-action" : "bg-romance"}`}
-                      ></div>
+                      <div className={`w-4 h-4 rounded-full ${genre.bgColor}`}></div>
                       <h3 className="text-xl font-semibold">{genre.name}</h3>
                     </div>
                     <Button variant="link" asChild>
-                      <Link href={`/genre/${genre.id}`}>
+                      <Link href={`/genre/${normalizeUrl(genre.name)}`}>
                         Ver todas
                         <ChevronRight className="ml-1 h-4 w-4" />
                       </Link>
@@ -211,7 +213,7 @@ export default function GenresPage() {
                   </div>
                   <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     {[...Array(4)].map((_, i) => (
-                      <Card key={i} className="overflow-hidden novel-card">
+                      <Card key={i} className="overflow-hidden">
                         <Link href={`/novel/${i + 1}`}>
                           <div className="relative">
                             <Image
@@ -219,7 +221,7 @@ export default function GenresPage() {
                               width={180}
                               height={240}
                               alt={`Novela de ${genre.name} ${i + 1}`}
-                              className="w-full object-cover novel-cover"
+                              className="w-full object-cover"
                             />
                             <div className="absolute top-2 right-2 flex items-center gap-1 rounded-md bg-black/60 px-2 py-1 text-xs text-white">
                               <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
@@ -229,7 +231,7 @@ export default function GenresPage() {
                         </Link>
                         <CardHeader className="p-4">
                           <CardTitle className="line-clamp-1 text-base">
-                            <Link href={`/novel/${i + 1}`} className="hover:text-primary transition-colors">
+                            <Link href={`/novel/${i + 1}`} className="hover:text-primary">
                               {genre.popular[i % 3]} {i + 1}
                             </Link>
                           </CardTitle>
@@ -245,16 +247,7 @@ export default function GenresPage() {
                         </CardContent>
                         <CardFooter className="flex items-center justify-between p-4 pt-0">
                           <div className="flex flex-wrap gap-1">
-                            <span
-                              className={`rounded-full px-2 py-1 text-xs ${genre.id === "fantasia"
-                                  ? "bg-fantasy/20 text-fantasy-dark"
-                                  : genre.id === "accion"
-                                    ? "bg-action/20 text-action-dark"
-                                    : "bg-romance/20 text-romance-dark"
-                                }`}
-                            >
-                              {genre.name}
-                            </span>
+                            <span className="rounded-full bg-muted px-2 py-1 text-xs">{genre.name}</span>
                             <span className="rounded-full bg-muted px-2 py-1 text-xs">
                               {i % 3 === 0 ? "Aventura" : i % 3 === 1 ? "Drama" : "Misterio"}
                             </span>
@@ -268,9 +261,9 @@ export default function GenresPage() {
             </div>
           </div>
 
-          {/* Banner CTA con gradiente */}
+          {/* Banner CTA con color de fondo */}
           <div className="mt-12 rounded-lg border overflow-hidden">
-            <div className="gradient-fantasy p-6 text-white">
+            <div className="bg-purple-600 p-6 text-white">
               <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
                 <div>
                   <h2 className="text-xl font-bold">¿No encuentras lo que buscas?</h2>
@@ -278,8 +271,8 @@ export default function GenresPage() {
                     Utiliza nuestra búsqueda avanzada para encontrar novelas con criterios específicos.
                   </p>
                 </div>
-                <Button className="bg-white text-fantasy hover:bg-white/90">
-                  <Link href="/search/advanced">Búsqueda avanzada</Link>
+                <Button className="bg-white text-purple-700 hover:bg-white/90">
+                  <Link href="genres/advanced">Búsqueda avanzada</Link>
                 </Button>
               </div>
             </div>

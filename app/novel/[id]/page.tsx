@@ -22,52 +22,14 @@ import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { use } from 'react'
+import { SiteHeader } from "@/components/site-header"
 
 export default function NovelDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id: novelId } = use(params)
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-16 items-center">
-          {/* Logo y nombre del sitio - Versión compacta en móvil */}
-          <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-            <BookOpen className="h-6 w-6" />
-            <span className="hidden sm:inline">WebNovelApp</span>
-          </Link>
-
-          {/* Navegación principal - Se oculta en pantallas muy pequeñas */}
-          <nav className="ml-auto hidden sm:flex gap-4 sm:gap-6">
-            <Link href="/explore" className="text-sm font-medium">
-              Explorar
-            </Link>
-            <Link href="/rankings" className="text-sm font-medium">
-              Rankings
-            </Link>
-            <Link href="/genres" className="text-sm font-medium">
-              Géneros
-            </Link>
-            <Link href="/latest" className="text-sm font-medium">
-              Novedades
-            </Link>
-          </nav>
-
-          {/* Botones de inicio de sesión/registro - Adaptados para móvil */}
-          <div className="ml-auto sm:ml-4 flex items-center gap-2">
-            <Button variant="outline" size="sm" className="text-xs sm:text-sm px-2 sm:px-3" asChild>
-              <Link href="/login">
-                <span className="hidden sm:inline">Iniciar </span>Sesión
-              </Link>
-            </Button>
-            <Button size="sm" className="text-xs sm:text-sm px-2 sm:px-3" asChild>
-              <Link href="/register">
-                <span className="hidden sm:inline">Registrarse</span>
-                <span className="sm:hidden">Registro</span>
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="flex-1">
         <div className="container px-4 py-6 md:px-6 md:py-12">
@@ -416,10 +378,10 @@ export default function NovelDetailPage({ params }: { params: Promise<{ id: stri
         <div className="container flex flex-col items-center justify-between gap-4 px-4 md:flex-row md:px-6">
           <div className="flex items-center gap-2">
             <BookOpen className="h-5 w-5" />
-            <span className="text-lg font-bold">WebNovelApp</span>
+            <span className="text-lg font-bold">NovelUzu</span>
           </div>
           <p className="text-center text-xs sm:text-sm text-muted-foreground md:text-left">
-            &copy; {new Date().getFullYear()} WebNovelApp. Todos los derechos reservados.
+            &copy; {new Date().getFullYear()} NovelUzu. Todos los derechos reservados.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/terms" className="text-xs sm:text-sm text-muted-foreground hover:underline">

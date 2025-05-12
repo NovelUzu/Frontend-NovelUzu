@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowUp, BookOpen, Crown, FlameIcon as Fire, Star, TrendingUp } from "lucide-react"
+import { ArrowUp, BookOpen, ChevronRight, Crown, FlameIcon as Fire, Star, TrendingUp } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -14,9 +14,16 @@ export default function RankingsPage() {
       <SiteHeader />
       <main className="flex-1">
         <div className="container px-4 py-8 md:px-6 md:py-12">
-          <div className="mb-8 space-y-4">
-            <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Rankings</h1>
-            <p className="text-muted-foreground">
+          <div className="mb-8">
+            <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+              <Link href="/" className="hover:underline">
+                Inicio
+              </Link>
+              <ChevronRight className="h-4 w-4" />
+              <span className="font-medium text-foreground">Explorar</span>
+            </div>
+            <h1 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">Rankings</h1>
+            <p className="mt-2 text-muted-foreground">
               Descubre las novelas más populares, mejor valoradas y con más lecturas en nuestra plataforma.
             </p>
           </div>

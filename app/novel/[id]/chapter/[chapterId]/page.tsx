@@ -2,7 +2,18 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, ArrowRight, BookOpen, ChevronLeft, ChevronRight, List, Moon, Settings, Sun } from "lucide-react"
+import {
+  ArrowLeft,
+  ArrowRight,
+  BookOpen,
+  ChevronLeft,
+  ChevronRight,
+  List,
+  Moon,
+  Settings,
+  Sun,
+  BookText,
+} from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -11,11 +22,12 @@ import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Slider } from "@/components/ui/slider"
 
+
 import { use } from 'react'
 export default function ChapterPage({ params }: { params: Promise<{ id: string; chapterId: string }> }) {
-    const { id: novelId, chapterId } = use(params)
-    const [fontSize, setFontSize] = useState(16)
-    const [theme, setTheme] = useState<"light" | "dark" | "sepia">("light")
+  const { id: novelId, chapterId } = use(params)
+  const [fontSize, setFontSize] = useState(16)
+  const [theme, setTheme] = useState<"light" | "dark" | "sepia">("light")
 
   return (
     <div
@@ -72,7 +84,7 @@ export default function ChapterPage({ params }: { params: Promise<{ id: string; 
                   <span className="sr-only">Configuración</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuContent align="end" className="w-70">
                 <div className="p-2">
                   <div className="space-y-1 pb-2">
                     <h4 className="text-sm font-medium">Tema</h4>
@@ -101,7 +113,7 @@ export default function ChapterPage({ params }: { params: Promise<{ id: string; 
                         className={`flex-1 ${theme === "sepia" ? "border-primary" : ""}`}
                         onClick={() => setTheme("sepia")}
                       >
-                        <BookOpen className="mr-1 h-4 w-4" />
+                        <BookText className="mr-1 h-4 w-4" />
                         Sepia
                       </Button>
                     </div>
@@ -150,7 +162,7 @@ export default function ChapterPage({ params }: { params: Promise<{ id: string; 
             <p className="text-sm text-muted-foreground">Publicado: 10 de mayo, 2023</p>
           </div>
           <div
-            className={`prose max-w-none ${theme === "dark" ? "prose-invert" : ""}`}
+            className={`prose max-w-none ${theme === "dark" ? "prose-invert" : theme === "sepia" ? "prose-stone" : ""}`}
             style={{ fontSize: `${fontSize}px` }}
           >
             <p>
@@ -316,7 +328,7 @@ export default function ChapterPage({ params }: { params: Promise<{ id: string; 
         <div className="container flex flex-col items-center justify-between gap-4 px-4 md:flex-row md:px-6">
           <div className="flex items-center gap-2">
             <BookOpen className="h-5 w-5" />
-            <span className="text-lg font-bold">WebNovelApp</span>
+            <span className="text-lg font-bold">NovelUzu</span>
           </div>
           <div className="flex items-center gap-4">
             <Button variant="outline" size="sm" className="gap-2" asChild>
