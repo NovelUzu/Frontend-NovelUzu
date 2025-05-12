@@ -20,7 +20,7 @@ export default function RankingsPage() {
                 Inicio
               </Link>
               <ChevronRight className="h-4 w-4" />
-              <span className="font-medium text-foreground">Explorar</span>
+              <span className="font-medium text-foreground">Rankings</span>
             </div>
             <h1 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">Rankings</h1>
             <p className="mt-2 text-muted-foreground">
