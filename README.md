@@ -5,7 +5,7 @@
   
   <p>
     <img src="https://img.shields.io/badge/Next.js-15.2.4-black?logo=next.js" alt="Next.js" />
-    <img src="https://img.shields.io/badge/React-19.0.0-blue?logo=react" alt="React" />
+    <img src="https://img.shields.io/badge/React-18.0.0-blue?logo=react" alt="React" />
     <img src="https://img.shields.io/badge/TypeScript-5.x-blue?logo=typescript" alt="TypeScript" />
     <img src="https://img.shields.io/badge/Tailwind-3.4.17-38bdf8?logo=tailwindcss" alt="Tailwind" />
     <img src="https://img.shields.io/badge/Supabase-2.0.0-3ecf8e?logo=supabase" alt="Supabase" />

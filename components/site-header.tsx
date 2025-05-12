@@ -52,7 +52,7 @@ export function SiteHeader() {
         {/* Logo y nombre del sitio */}
         <Link href="/" className="flex items-center gap-2 font-bold text-xl">
           <BookOpen className="h-6 w-6 text-primary" />
-          <span className="hidden sm:inline text-purple-600">NovelUzu</span>
+          <span className="text-purple-600">NovelUzu</span>
         </Link>
 
         {/* Navegación para pantallas medianas y grandes */}

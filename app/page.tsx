@@ -61,8 +61,7 @@ export default function HomePage() {
                   </Button>
                   <Button
                     size="lg"
-                    variant="outline"
-                    className="w-full min-[400px]:w-auto border-white text-white hover:bg-white/10"
+                    className="w-full min-[400px]:w-auto bg-white text-fantasy hover:bg-white/90"
                     asChild
                   >
                     <Link href="/popular">Novelas Populares</Link>
