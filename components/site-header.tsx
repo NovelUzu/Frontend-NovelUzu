@@ -93,7 +93,7 @@ export function SiteHeader() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 ml-1">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={user?.avatar || "/placeholder.jpeg"} alt={user?.username} />
+                    <AvatarImage src={user?.avatar || "/placeholder.jpg"} alt={user?.username} />
                     <AvatarFallback>{user?.username?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
                   </Avatar>
                 </Button>
@@ -209,7 +209,7 @@ export function SiteHeader() {
               <div className="flex flex-col gap-2 border-t pt-2">
                 <div className="flex items-center gap-2 p-2">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={user?.avatar || "/placeholder.jpeg"} alt={user?.username} />
+                    <AvatarImage src={user?.avatar || "/placeholder.jpg"} alt={user?.username} />
                     <AvatarFallback>{user?.username?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
                   </Avatar>
                   <div>

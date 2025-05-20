@@ -2,47 +2,35 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import {
-  BarChart3,
-  BookOpen,
-  Flag,
-  Home,
   LayoutDashboard,
-  LogOut,
-  Menu,
-  MessageSquare,
-  Settings,
   Users,
+  BookOpen,
+  Settings,
+  BarChart,
+  MessageSquare,
+  Bell,
+  Shield,
+  Menu,
   X,
+  FileText,
+  Tag,
+  DollarSign,
+  Flag,
 } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
 
 export function AdminSidebar() {
   const pathname = usePathname()
-  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen)
   }
 
-  const closeSidebar = () => {
-    setIsOpen(false)
-  }
-
-  const handleLogout = () => {
-    // Eliminar el estado de administrador
-    localStorage.removeItem("isAdmin")
-    // Redirigir a la página de inicio
-    router.push("/")
-  }
-
-  const navItems = [
+  const menuItems = [
     {
-      title: "Dashboard",
+      title: "Panel principal",
       href: "/admin",
       icon: <LayoutDashboard className="h-5 w-5" />,
     },
@@ -57,9 +45,9 @@ export function AdminSidebar() {
       icon: <BookOpen className="h-5 w-5" />,
     },
     {
-      title: "Comentarios",
-      href: "/admin/comments",
-      icon: <MessageSquare className="h-5 w-5" />,
+      title: "Estadísticas",
+      href: "/admin/analytics",
+      icon: <BarChart className="h-5 w-5" />,
     },
     {
       title: "Reportes",
@@ -67,9 +55,14 @@ export function AdminSidebar() {
       icon: <Flag className="h-5 w-5" />,
     },
     {
-      title: "Estadísticas",
-      href: "/admin/stats",
-      icon: <BarChart3 className="h-5 w-5" />,
+      title: "Comentarios",
+      href: "/admin/comments",
+      icon: <MessageSquare className="h-5 w-5" />,
+    },
+    {
+      title: "Notificaciones",
+      href: "/admin/notifications",
+      icon: <Bell className="h-5 w-5" />,
     },
     {
       title: "Configuración",
@@ -81,66 +74,55 @@ export function AdminSidebar() {
   return (
     <>
       {/* Botón de menú móvil */}
-      <Button variant="outline" size="icon" className="fixed left-4 top-4 z-50 md:hidden" onClick={toggleSidebar}>
-        {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-      </Button>
+      <button
+        onClick={toggleSidebar}
+        className="md:hidden fixed bottom-4 right-4 z-50 bg-blue-600 text-white p-3 rounded-full shadow-lg"
+        aria-label={isOpen ? "Cerrar menú" : "Abrir menú"}
+      >
+        {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+      </button>
 
-      {/* Overlay para cerrar el sidebar en móvil */}
+      {/* Overlay para móvil */}
       {isOpen && (
-        <div className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm md:hidden" onClick={closeSidebar} />
+        <div className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40" onClick={() => setIsOpen(false)} />
       )}
 
       {/* Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-64 transform border-r bg-card transition-transform duration-200 ease-in-out md:relative md:translate-x-0 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`
+          bg-gray-900 text-white w-64 flex-shrink-0 overflow-y-auto
+          fixed md:static inset-y-0 left-0 z-50 transform transition-transform duration-200 ease-in-out
+          ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}
+        `}
       >
-        <div className="flex h-16 items-center border-b px-4">
-          <Link href="/admin" className="flex items-center gap-2 font-bold text-xl" onClick={closeSidebar}>
-            <BookOpen className="h-6 w-6 text-primary" />
-            <span>Admin Panel</span>
-          </Link>
+        <div className="p-4 border-b border-gray-800">
+          <h2 className="text-xl font-bold">Panel de Administración</h2>
+          <p className="text-gray-400 text-sm">NovelUzu</p>
         </div>
 
-        <ScrollArea className="h-[calc(100vh-4rem)]">
-          <div className="px-3 py-4">
-            <nav className="flex flex-col gap-1">
-              {navItems.map((item, index) => (
-                <Link
-                  key={index}
-                  href={item.href}
-                  onClick={closeSidebar}
-                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors ${
-                    pathname === item.href ? "bg-accent text-accent-foreground" : "hover:bg-accent/50"
-                  }`}
-                >
-                  {item.icon}
-                  {item.title}
-                </Link>
-              ))}
-            </nav>
+        <nav className="p-4">
+          <ul className="space-y-1">
+            {menuItems.map((item) => {
+              const isActive = pathname === item.href
 
-            <div className="mt-6 border-t pt-6">
-              <Link
-                href="/"
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm hover:bg-accent/50"
-                onClick={closeSidebar}
-              >
-                <Home className="h-5 w-5" />
-                Volver al sitio
-              </Link>
-              <Button
-                variant="ghost"
-                className="w-full justify-start gap-3 px-3 py-2 text-sm hover:bg-accent/50"
-                onClick={handleLogout}
-              >
-                <LogOut className="h-5 w-5" />
-                Cerrar sesión
-              </Button>
-            </div>
-          </div>
-        </ScrollArea>
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={`
+                      flex items-center gap-3 px-3 py-2 rounded-md transition-colors
+                      ${isActive ? "bg-blue-700 text-white" : "text-gray-300 hover:bg-gray-800 hover:text-white"}
+                    `}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.icon}
+                    <span>{item.title}</span>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </nav>
       </aside>
     </>
   )

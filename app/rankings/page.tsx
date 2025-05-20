@@ -56,7 +56,7 @@ export default function RankingsPage() {
                       </div>
                       <div className="relative h-32 w-24 overflow-hidden rounded-md sm:h-40 sm:w-28">
                         <Image
-                          src={`/placeholder.jpeg?height=160&width=120&text=Top ${i + 1}`}
+                          src={`/placeholder.jpg?height=160&width=120&text=Top ${i + 1}`}
                           fill
                           alt={`Novela Top ${i + 1}`}
                           className="object-cover"
@@ -137,7 +137,7 @@ export default function RankingsPage() {
                       </div>
                       <div className="relative h-32 w-24 overflow-hidden rounded-md sm:h-40 sm:w-28">
                         <Image
-                          src={`/placeholder.jpeg?height=160&width=120&text=Top ${i + 1}`}
+                          src={`/placeholder.jpg?height=160&width=120&text=Top ${i + 1}`}
                           fill
                           alt={`Novela Top ${i + 1}`}
                           className="object-cover"

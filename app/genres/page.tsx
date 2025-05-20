@@ -217,7 +217,7 @@ export default function GenresPage() {
                         <Link href={`/novel/${i + 1}`}>
                           <div className="relative">
                             <Image
-                              src={`/placeholder.jpeg?height=240&width=180&text=${genre.name} ${i + 1}`}
+                              src={`/placeholder.jpg?height=240&width=180&text=${genre.name} ${i + 1}`}
                               width={180}
                               height={240}
                               alt={`Novela de ${genre.name} ${i + 1}`}

@@ -72,15 +72,14 @@ export default function RegisterPage() {
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
       // Iniciar sesión automáticamente después del registro
-      const success = await login(formData.email, formData.password)
+      await login(formData.email, formData.password)
 
-      if (success) {
-        toast({
-          title: "Registro exitoso",
-          description: "Bienvenido a NovelUzu",
-        })
-        router.push("/user/profile")
-      }
+      toast({
+        title: "Registro exitoso",
+        description: "Bienvenido a NovelUzu",
+      })
+      router.push("/user/profile")
+
     } catch (error) {
       console.error("Error al registrarse:", error)
       toast({

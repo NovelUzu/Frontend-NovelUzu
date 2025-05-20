@@ -88,7 +88,7 @@ export default function ExplorePage() {
                       <Link href={`/novel/${i + 1}`}>
                         <div className="relative">
                           <Image
-                            src={`/placeholder.jpeg?height=240&width=180&text=Novela ${i + 1}`}
+                            src={`/placeholder.jpg?height=240&width=180&text=Novela ${i + 1}`}
                             width={180}
                             height={240}
                             alt={`Novela ${i + 1}`}
@@ -146,7 +146,7 @@ export default function ExplorePage() {
                       <Link href={`/novel/${i + 20}`}>
                         <div className="relative">
                           <Image
-                            src={`/placeholder.jpeg?height=240&width=180&text=Fantasía ${i + 1}`}
+                            src={`/placeholder.jpg?height=240&width=180&text=Fantasía ${i + 1}`}
                             width={180}
                             height={240}
                             alt={`Novela de Fantasía ${i + 1}`}

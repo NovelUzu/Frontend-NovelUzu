@@ -11,7 +11,7 @@ export function RecentNovels() {
       author: "Carlos Rodríguez",
       genre: "Fantasía",
       status: "published",
-      cover: "/placeholder.jpeg?height=60&width=40",
+      cover: "/placeholder.jpg?height=60&width=40",
       published: "Hace 1 día",
       chapters: 12,
     },
@@ -21,7 +21,7 @@ export function RecentNovels() {
       author: "María López",
       genre: "Romance",
       status: "published",
-      cover: "/placeholder.jpeg?height=60&width=40",
+      cover: "/placeholder.jpg?height=60&width=40",
       published: "Hace 3 días",
       chapters: 8,
     },
@@ -31,7 +31,7 @@ export function RecentNovels() {
       author: "Juan Pérez",
       genre: "Ciencia Ficción",
       status: "published",
-      cover: "/placeholder.jpeg?height=60&width=40",
+      cover: "/placeholder.jpg?height=60&width=40",
       published: "Hace 5 días",
       chapters: 15,
     },
@@ -41,7 +41,7 @@ export function RecentNovels() {
       author: "Ana Martínez",
       genre: "Misterio",
       status: "published",
-      cover: "/placeholder.jpeg?height=60&width=40",
+      cover: "/placeholder.jpg?height=60&width=40",
       published: "Hace 1 semana",
       chapters: 10,
     },
@@ -51,7 +51,7 @@ export function RecentNovels() {
       author: "Pedro Sánchez",
       genre: "Aventura",
       status: "published",
-      cover: "/placeholder.jpeg?height=60&width=40",
+      cover: "/placeholder.jpg?height=60&width=40",
       published: "Hace 2 semanas",
       chapters: 6,
     },
@@ -62,7 +62,7 @@ export function RecentNovels() {
       {novels.map((novel) => (
         <div key={novel.id} className="flex items-center gap-4">
           <div className="h-12 w-8 overflow-hidden rounded-sm">
-            <img src={novel.cover || "/placeholder.jpeg"} alt={novel.title} className="h-full w-full object-cover" />
+            <img src={novel.cover || "/placeholder.jpg"} alt={novel.title} className="h-full w-full object-cover" />
           </div>
           <div className="flex-1 space-y-1">
             <p className="text-sm font-medium leading-none">{novel.title}</p>

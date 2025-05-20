@@ -84,7 +84,7 @@ export default function EditProfilePage() {
               <CardContent className="flex flex-col items-center gap-4">
                 <div className="relative">
                   <Avatar className="h-32 w-32">
-                    <AvatarImage src="/placeholder.jpeg?height=128&width=128&text=LA" alt="@lectoravido" />
+                    <AvatarImage src="/placeholder.jpg?height=128&width=128&text=LA" alt="@lectoravido" />
                     <AvatarFallback>LA</AvatarFallback>
                   </Avatar>
                   <Button

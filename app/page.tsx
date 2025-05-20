@@ -122,7 +122,7 @@ export default function HomePage() {
                       <Link href={`/novel/${i}`} className="overflow-hidden">
                         <div className="relative aspect-[3/4] w-full">
                           <Image
-                            src={`/placeholder.jpeg?height=240&width=180&text=Novela ${i}`}
+                            src={`/placeholder.jpg?height=240&width=180&text=Novela ${i}`}
                             fill
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                             alt={`Novela ${i}`}
@@ -169,7 +169,7 @@ export default function HomePage() {
                       <Link href={`/novel/${i}`} className="overflow-hidden">
                         <div className="relative aspect-[3/4] w-full">
                           <Image
-                            src={`/placeholder.jpeg?height=240&width=180&text=Novela ${i}`}
+                            src={`/placeholder.jpg?height=240&width=180&text=Novela ${i}`}
                             fill
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                             alt={`Novela ${i}`}
@@ -215,7 +215,7 @@ export default function HomePage() {
                       <Link href={`/novel/${i}`} className="overflow-hidden">
                         <div className="relative aspect-[3/4] w-full">
                           <Image
-                            src={`/placeholder.jpeg?height=240&width=180&text=Novela ${i}`}
+                            src={`/placeholder.jpg?height=240&width=180&text=Novela ${i}`}
                             fill
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                             alt={`Novela ${i}`}

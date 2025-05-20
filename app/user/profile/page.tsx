@@ -51,7 +51,7 @@ export default function UserProfilePage() {
           <div className="mb-8 flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:gap-8">
             {/* Avatar del usuario */}
             <Avatar className="h-20 w-20 sm:h-24 sm:w-24 border-4 border-background">
-              <AvatarImage src={user?.avatar || "/placeholder.jpeg"} alt={user?.username} />
+              <AvatarImage src={user?.avatar || "/placeholder.jpg"} alt={user?.username} />
               <AvatarFallback>{user?.username?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
             </Avatar>
 
@@ -118,7 +118,7 @@ export default function UserProfilePage() {
                       <Link href={`/novel/${i}`}>
                         <div className="relative aspect-[3/4] w-full">
                           <Image
-                            src={`/placeholder.jpeg?height=240&width=180&text=Novela ${i}`}
+                            src={`/placeholder.jpg?height=240&width=180&text=Novela ${i}`}
                             fill
                             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                             alt={`Novela ${i}`}
@@ -185,7 +185,7 @@ export default function UserProfilePage() {
                     {/* Imagen de portada */}
                     <div className="relative w-full sm:w-auto mx-auto sm:mx-0 max-w-[120px] aspect-[3/4]">
                       <Image
-                        src={`/placeholder.jpeg?height=120&width=90&text=Novela ${i}`}
+                        src={`/placeholder.jpg?height=120&width=90&text=Novela ${i}`}
                         fill
                         sizes="(max-width: 640px) 120px, 90px"
                         alt={`Novela ${i}`}
@@ -244,7 +244,7 @@ export default function UserProfilePage() {
                         <div className="flex items-center gap-3">
                           <div className="relative h-10 w-10 overflow-hidden rounded flex-shrink-0">
                             <Image
-                              src={`/placeholder.jpeg?height=60&width=45&text=Novela ${i}`}
+                              src={`/placeholder.jpg?height=60&width=45&text=Novela ${i}`}
                               fill
                               sizes="40px"
                               alt={`Novela ${i}`}
@@ -321,7 +321,7 @@ export default function UserProfilePage() {
                       <Link href={`/novel/${i}`}>
                         <div className="relative aspect-[3/4] w-full">
                           <Image
-                            src={`/placeholder.jpeg?height=240&width=180&text=Favorito ${i}`}
+                            src={`/placeholder.jpg?height=240&width=180&text=Favorito ${i}`}
                             fill
                             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                             alt={`Novela Favorita ${i}`}

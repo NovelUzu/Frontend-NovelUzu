@@ -329,7 +329,7 @@ export default function AdvancedSearchPage() {
                         <Link href={`/novel/${result.id}`}>
                           <div className="relative">
                             <Image
-                              src={`/placeholder.jpeg?height=240&width=180&text=Novela ${result.id}`}
+                              src={`/placeholder.jpg?height=240&width=180&text=Novela ${result.id}`}
                               width={180}
                               height={240}
                               alt={`${result.title} ${result.subtitle}`}

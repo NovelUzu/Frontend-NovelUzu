@@ -11,22 +11,92 @@
  *
  * Se adapta a diferentes tamaños de pantalla reorganizando el contenido
  */
+"use client"
+
+import { use, useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { BookOpen, ChevronRight, Clock, Heart, Share2, Star, Users } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { BookOpen, ChevronRight, Clock, Heart, Share2, Star, Users, Check } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
-import { use } from 'react'
+import { useToast } from "@/hooks/use-toast"
+import { useAuth, type LibraryItem } from "@/lib/auth-context"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 
+
+// Interfaz para los parámetros de la página
+interface NovelDetailPageProps {
+  params: {
+    id: string
+  }
+}
+
 export default function NovelDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  // Obtener el ID de la novela de los parámetros de la URL
   const { id: novelId } = use(params)
+  const router = useRouter()
+  const { toast } = useToast()
+  const { user, isAuthenticated, addToLibrary, removeFromLibrary, isInLibrary } = useAuth()
+
+  // Estado para controlar si la novela está en la biblioteca
+  const [inLibrary, setInLibrary] = useState(false)
+
+  // Verificar si la novela está en la biblioteca al cargar la página
+  useEffect(() => {
+    if (isAuthenticated) {
+      setInLibrary(isInLibrary(novelId))
+    }
+  }, [isAuthenticated, isInLibrary, novelId])
+
+  // Función para comenzar a leer
+  const handleStartReading = () => {
+    // Redirigir al primer capítulo (asumimos que es el capítulo 1)
+    router.push(`/novel/${novelId}/chapter/1`)
+  }
+
+  // Función para añadir o quitar de la biblioteca
+  const handleLibraryToggle = () => {
+    if (!isAuthenticated) {
+      // Si no está autenticado, mostrar mensaje y redirigir a login
+      toast({
+        title: "Inicia sesión para continuar",
+        description: "Necesitas iniciar sesión para añadir novelas a tu biblioteca",
+        variant: "destructive",
+      })
+      router.push("/login")
+      return
+    }
+
+    if (inLibrary) {
+      // Si ya está en la biblioteca, quitarla
+      removeFromLibrary(novelId)
+      setInLibrary(false)
+      toast({
+        title: "Novela eliminada",
+        description: "La novela ha sido eliminada de tu biblioteca",
+      })
+    } else {
+      // Si no está en la biblioteca, añadirla
+      const novelInfo: LibraryItem = {
+        novelId,
+        title: `El Ascenso del Héroe Legendario ${novelId}`,
+        coverUrl: `/placeholder.jpg?height=320&width=240&text=Novela ${novelId}`,
+        addedAt: new Date().toISOString(),
+      }
+      addToLibrary(novelInfo)
+      setInLibrary(true)
+      toast({
+        title: "Novela añadida",
+        description: "La novela ha sido añadida a tu biblioteca",
+      })
+    }
+  }
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -41,7 +111,7 @@ export default function NovelDetailPage({ params }: { params: Promise<{ id: stri
               {/* Portada de la novela con tamaño adaptativo */}
               <div className="relative mb-4 w-full max-w-[240px]">
                 <Image
-                  src={`/placeholder.jpeg?height=320&width=240&text=Novela ${novelId}`}
+                  src={`/placeholder.jpg?height=320&width=240&text=Novela ${novelId}`}
                   width={240}
                   height={320}
                   alt={`El Ascenso del Héroe Legendario ${novelId}`}
@@ -57,42 +127,32 @@ export default function NovelDetailPage({ params }: { params: Promise<{ id: stri
 
               {/* Botones de acción - Ancho completo en móvil, adaptado en desktop */}
               <div className="flex w-full max-w-[240px] flex-col gap-3">
-                <Button className="w-full">Comenzar a Leer</Button>
-                <Button variant="outline" className="w-full gap-2">
-                  <Heart className="h-4 w-4" />
-                  Añadir a Biblioteca
+                <Button className="w-full" onClick={handleStartReading}>
+                  Comenzar a Leer
                 </Button>
-                <div className="mt-2 flex justify-between">
-                  <Button variant="ghost" size="icon" className="h-9 w-9">
-                    <Share2 className="h-4 w-4" />
-                    <span className="sr-only">Compartir</span>
-                  </Button>
-                  <div className="flex items-center gap-1 text-sm">
-                    <Users className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">10.2K lectores</span>
-                  </div>
-                </div>
+                <Button
+                  variant={inLibrary ? "secondary" : "outline"}
+                  className="w-full gap-2"
+                  onClick={handleLibraryToggle}
+                >
+                  {inLibrary ? (
+                    <>
+                      <Check className="h-4 w-4" />
+                      En Biblioteca
+                    </>
+                  ) : (
+                    <>
+                      <Heart className="h-4 w-4" />
+                      Añadir a Biblioteca
+                    </>
+                  )}
+                </Button>
               </div>
             </div>
 
             {/* Columna derecha (información detallada) */}
             <div className="lg:w-3/4">
-              {/* Migas de pan - Ocultas en pantallas muy pequeñas */}
               <div className="mb-6 space-y-2">
-                <div className="hidden sm:flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-                  <Link href="/" className="hover:underline">
-                    Inicio
-                  </Link>
-                  <ChevronRight className="h-4 w-4" />
-                  <Link href="/explore" className="hover:underline">
-                    Explorar
-                  </Link>
-                  <ChevronRight className="h-4 w-4" />
-                  <Link href="/genre/fantasia" className="hover:underline">
-                    Fantasía
-                  </Link>
-                </div>
-
                 {/* Título de la novela - Tamaño adaptativo */}
                 <h1 className="text-2xl font-bold tracking-tight md:text-3xl lg:text-4xl">
                   El Ascenso del Héroe Legendario {novelId}
@@ -253,7 +313,26 @@ export default function NovelDetailPage({ params }: { params: Promise<{ id: stri
                   {/* Encabezado con botón de escribir reseña */}
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 mb-6">
                     <h2 className="text-xl font-semibold">Reseñas</h2>
-                    <Button>Escribir Reseña</Button>
+                    <Button
+                      onClick={() => {
+                        if (!isAuthenticated) {
+                          toast({
+                            title: "Inicia sesión para continuar",
+                            description: "Necesitas iniciar sesión para escribir una reseña",
+                            variant: "destructive",
+                          })
+                          router.push("/login")
+                          return
+                        }
+                        // Aquí iría la lógica para abrir el modal de escribir reseña
+                        toast({
+                          title: "Función en desarrollo",
+                          description: "La función de escribir reseñas estará disponible próximamente",
+                        })
+                      }}
+                    >
+                      Escribir Reseña
+                    </Button>
                   </div>
 
                   {/* Lista de reseñas */}
@@ -264,7 +343,7 @@ export default function NovelDetailPage({ params }: { params: Promise<{ id: stri
                         <div className="flex items-center gap-3">
                           <div className="relative h-10 w-10 overflow-hidden rounded-full flex-shrink-0">
                             <Image
-                              src="/placeholder.jpeg?height=40&width=40&text=U"
+                              src="/placeholder.jpg?height=40&width=40&text=U"
                               fill
                               alt="Avatar de usuario"
                               className="object-cover"
@@ -297,7 +376,7 @@ export default function NovelDetailPage({ params }: { params: Promise<{ id: stri
                         <div className="flex items-center gap-3">
                           <div className="relative h-10 w-10 overflow-hidden rounded-full flex-shrink-0">
                             <Image
-                              src="/placeholder.jpeg?height=40&width=40&text=F"
+                              src="/placeholder.jpg?height=40&width=40&text=F"
                               fill
                               alt="Avatar de usuario"
                               className="object-cover"
@@ -347,7 +426,7 @@ export default function NovelDetailPage({ params }: { params: Promise<{ id: stri
                   <Link href={`/novel/${i + 20}`}>
                     <div className="relative aspect-[3/4] w-full">
                       <Image
-                        src={`/placeholder.jpeg?height=240&width=180&text=Similar ${i}`}
+                        src={`/placeholder.jpg?height=240&width=180&text=Similar ${i}`}
                         fill
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                         alt={`Novela Similar ${i}`}

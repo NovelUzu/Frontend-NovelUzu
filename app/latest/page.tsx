@@ -42,7 +42,7 @@ export default function LatestPage() {
                     <div className="flex flex-col gap-4 p-4 sm:flex-row">
                       <div className="relative h-32 w-24 flex-shrink-0 overflow-hidden rounded-md sm:h-40 sm:w-28">
                         <Image
-                          src={`/placeholder.jpeg?height=160&width=120&text=Novela ${i + 1}`}
+                          src={`/placeholder.jpg?height=160&width=120&text=Novela ${i + 1}`}
                           fill
                           alt={`Novela ${i + 1}`}
                           className="object-cover"
@@ -124,7 +124,7 @@ export default function LatestPage() {
                     <Link href={`/novel/${i + 20}`}>
                       <div className="relative">
                         <Image
-                          src={`/placeholder.jpeg?height=240&width=180&text=Nueva ${i + 1}`}
+                          src={`/placeholder.jpg?height=240&width=180&text=Nueva ${i + 1}`}
                           width={180}
                           height={240}
                           alt={`Nueva Novela ${i + 1}`}

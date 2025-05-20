@@ -70,7 +70,7 @@ export default function AuthorPage({ params }: { params: Promise<{ id: string }>
             <div className="md:w-1/3 lg:w-1/4">
               <div className="flex flex-col items-center text-center">
                 <Avatar className="h-32 w-32 md:h-40 md:w-40">
-                  <AvatarImage src={`/placeholder.jpeg?height=160&width=160&text=A${authorId}`} alt="Autor Famoso" />
+                  <AvatarImage src={`/placeholder.jpg?height=160&width=160&text=A${authorId}`} alt="Autor Famoso" />
                   <AvatarFallback>AF</AvatarFallback>
                 </Avatar>
                 <h1 className="mt-4 text-2xl font-bold">Autor Famoso</h1>
@@ -146,7 +146,7 @@ export default function AuthorPage({ params }: { params: Promise<{ id: string }>
                         <Link href={`/novel/${i + 1}`}>
                           <div className="relative">
                             <Image
-                              src={`/placeholder.jpeg?height=240&width=180&text=Novela ${i + 1}`}
+                              src={`/placeholder.jpg?height=240&width=180&text=Novela ${i + 1}`}
                               width={180}
                               height={240}
                               alt={`Novela ${i + 1}`}
@@ -238,7 +238,7 @@ export default function AuthorPage({ params }: { params: Promise<{ id: string }>
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-3">
                               <Avatar>
-                                <AvatarImage src={`/placeholder.jpeg?height=40&width=40&text=U${i + 1}`} alt="Usuario" />
+                                <AvatarImage src={`/placeholder.jpg?height=40&width=40&text=U${i + 1}`} alt="Usuario" />
                                 <AvatarFallback>U{i + 1}</AvatarFallback>
                               </Avatar>
                               <div>
