@@ -13,6 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useToast } from "@/hooks/use-toast"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
@@ -21,7 +22,7 @@ import { useAuth } from "@/lib/auth-context"
 export default function RegisterPage() {
   const router = useRouter()
   const { toast } = useToast()
-  const { login, isAuthenticated } = useAuth()
+  const { register, isAuthenticated } = useAuth()
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
@@ -29,6 +30,7 @@ export default function RegisterPage() {
     email: "",
     password: "",
     confirmPassword: "",
+    role: "lector", // Valor por defecto: lector
     acceptTerms: false,
   })
 
@@ -43,6 +45,13 @@ export default function RegisterPage() {
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
+    }))
+  }
+
+  const handleRoleChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      role: value,
     }))
   }
 
@@ -68,18 +77,19 @@ export default function RegisterPage() {
     setIsLoading(true)
 
     try {
-      // Simulación de registro
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // Iniciar sesión automáticamente después del registro
-      await login(formData.email, formData.password)
+      // Registro con el rol seleccionado
+      await register(
+        formData.username,
+        formData.email,
+        formData.password,
+        formData.role as "lector" | "escritor" | "admin",
+      )
 
       toast({
         title: "Registro exitoso",
         description: "Bienvenido a NovelUzu",
       })
       router.push("/user/profile")
-
     } catch (error) {
       console.error("Error al registrarse:", error)
       toast({
@@ -177,6 +187,36 @@ export default function RegisterPage() {
                   />
                 </div>
               </div>
+
+              {/* Selección de rol: lector o escritor */}
+              <div className="space-y-2">
+                <Label>Tipo de cuenta</Label>
+                <RadioGroup
+                  value={formData.role}
+                  onValueChange={handleRoleChange}
+                  className="flex flex-col space-y-2 mt-2"
+                >
+                  <div className="flex items-center space-x-2 rounded-md border p-3">
+                    <RadioGroupItem value="lector" id="lector" />
+                    <Label htmlFor="lector" className="flex-1 cursor-pointer font-medium">
+                      Lector
+                      <p className="text-sm font-normal text-muted-foreground">
+                        Descubre y lee novelas de tus autores favoritos
+                      </p>
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2 rounded-md border p-3">
+                    <RadioGroupItem value="escritor" id="escritor" />
+                    <Label htmlFor="escritor" className="flex-1 cursor-pointer font-medium">
+                      Escritor
+                      <p className="text-sm font-normal text-muted-foreground">
+                        Publica tus propias novelas y conecta con tus lectores
+                      </p>
+                    </Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
               <div className="flex items-center space-x-2">
                 <Checkbox id="terms" checked={formData.acceptTerms} onCheckedChange={handleCheckboxChange} required />
                 <label

@@ -533,7 +533,6 @@ export default function AdminUsersPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-screen flex-col">
-        <SiteHeader />
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
@@ -546,7 +545,6 @@ export default function AdminUsersPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <SiteHeader />
       <main className="flex-1 container py-6 md:py-12">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>

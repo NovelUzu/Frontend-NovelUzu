@@ -97,7 +97,6 @@ export function AdminSidebar() {
       >
         <div className="p-4 border-b border-gray-800">
           <h2 className="text-xl font-bold">Panel de Administración</h2>
-          <p className="text-gray-400 text-sm">NovelUzu</p>
         </div>
 
         <nav className="p-4">
