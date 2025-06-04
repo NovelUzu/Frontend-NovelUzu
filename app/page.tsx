@@ -64,7 +64,10 @@ export default function HomePage() {
                     className="w-full min-[400px]:w-auto bg-white text-fantasy hover:bg-white/90"
                     asChild
                   >
-                    <Link href="/popular">Novelas Populares</Link>
+                    <Link href="/popular">
+                      Novelas Populares
+                      <ChevronRight className="ml-2 h-4 w-4" />
+                    </Link>
                   </Button>
                 </div>
               </div>
