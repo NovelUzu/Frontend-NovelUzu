@@ -30,11 +30,15 @@ import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 
 
-// Interfaz para los parámetros de la página
-interface NovelDetailPageProps {
-  params: {
-    id: string
-  }
+// Función para normalizar las URLs (eliminar tildes y caracteres especiales)
+function normalizeUrl(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // Eliminar acentos
+    .replace(/[^\w\s-]/g, "") // Eliminar caracteres especiales
+    .replace(/\s+/g, "-") // Reemplazar espacios con guiones
+    .replace(/-+/g, "-") // Eliminar guiones duplicados
 }
 
 export default function NovelDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -174,7 +178,7 @@ export default function NovelDetailPage({ params }: { params: Promise<{ id: stri
                   {["Fantasía", "Aventura", "Acción", "Drama"].map((tag) => (
                     <Link
                       key={tag}
-                      href={`/genre/${tag.toLowerCase()}`}
+                      href={`/genre/${normalizeUrl(tag.toLowerCase())}`}
                       className="rounded-full bg-muted px-3 py-1 text-xs hover:bg-muted/80"
                     >
                       {tag}
