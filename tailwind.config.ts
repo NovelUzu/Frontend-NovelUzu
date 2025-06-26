@@ -55,44 +55,64 @@ const config = {
         },
         // Colores personalizados para géneros
         fantasy: {
-          DEFAULT: "#8b5cf6", // Púrpura
-          light: "#c4b5fd",
-          dark: "#6d28d9",
+          DEFAULT: "#c084fc", // Lavanda mágica
+          light: "#e9d5ff",   // Lila claro
+          dark: "#7e22ce",    // Púrpura profundo
         },
         action: {
-          DEFAULT: "#ef4444", // Rojo
-          light: "#fca5a5",
-          dark: "#b91c1c",
+          DEFAULT: "#fb7185", // Rojo coral activo
+          light: "#fecdd3",   // Rosa suave
+          dark: "#be123c",    // Rojo carmesí
         },
         romance: {
-          DEFAULT: "#ec4899", // Rosa
-          light: "#f9a8d4",
-          dark: "#be185d",
+          DEFAULT: "#f472b6", // Rosa romántico
+          light: "#fbcfe8",   // Rosa pastel
+          dark: "#9d174d",    // Rosa vino
         },
         scifi: {
-          DEFAULT: "#06b6d4", // Cian
-          light: "#67e8f9",
-          dark: "#0e7490",
+          DEFAULT: "#38bdf8", // Azul galáctico
+          light: "#bae6fd",   // Celeste neón
+          dark: "#0c4a6e",    // Azul espacial
         },
         adventure: {
-          DEFAULT: "#10b981", // Esmeralda
-          light: "#6ee7b7",
-          dark: "#047857",
+          DEFAULT: "#34d399", // Verde jungla vibrante
+          light: "#a7f3d0",   // Verde selva claro
+          dark: "#065f46",    // Verde profundo
         },
         mystery: {
-          DEFAULT: "#7c3aed", // Violeta
-          light: "#c4b5fd",
-          dark: "#5b21b6",
+          DEFAULT: "#a78bfa", // Violeta enigmático
+          light: "#ddd6fe",   // Lavanda brumosa
+          dark: "#4c1d95",    // Índigo oscuro
         },
         drama: {
-          DEFAULT: "#f59e0b", // Ámbar
-          light: "#fcd34d",
-          dark: "#b45309",
+          DEFAULT: "#fbbf24", // Ámbar expresivo
+          light: "#fef08a",   // Amarillo suave
+          dark: "#b45309",    // Mostaza intensa
         },
         horror: {
-          DEFAULT: "#1e293b", // Slate oscuro
-          light: "#64748b",
-          dark: "#0f172a",
+          DEFAULT: "#475569", // Gris neblinoso
+          light: "#cbd5e1",   // Humo pálido
+          dark: "#1e293b",    // Azul sombra
+        },
+        historical: {
+          DEFAULT: "#f97316", // Naranja cobre
+          light: "#fdba74",   // Durazno claro
+          dark: "#7c2d12",    // Tierra seca
+        },
+        comedy: {
+          DEFAULT: "#facc15", // Amarillo vivo
+          light: "#fde047",   // Amarillo pastel
+          dark: "#a16207",    // Mostaza intenso
+        },
+        supernatural: {
+          DEFAULT: "#818cf8", // Azul-violeta etéreo
+          light: "#c7d2fe",   // Lavanda luminosa
+          dark: "#3730a3",    // Azul místico
+        },
+        martialarts: {
+          DEFAULT: "#fb923c", // Naranja tangerina
+          light: "#fed7aa",   // Naranja melocotón
+          dark: "#9a3412",    // Terracota marcial
         },
       },
       borderRadius: {

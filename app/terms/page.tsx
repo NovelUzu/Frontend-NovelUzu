@@ -209,45 +209,6 @@ export default function TermsPage() {
                 </Card>
               ))}
             </div>
-
-            {/* Contacto */}
-            <Card className="mt-12 gradient-fantasy text-white">
-              <CardHeader>
-                <CardTitle className="text-xl md:text-2xl">¿Preguntas sobre estos términos?</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <h4 className="font-semibold mb-2">Correo Electrónico</h4>
-                    <p className="text-white/90">legal@noveluzu.com</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2">Dirección</h4>
-                    <p className="text-white/90">
-                      123 Calle Principal
-                      <br />
-                      Ciudad, País 12345
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-6">
-                  <Button className="bg-white text-fantasy hover:bg-white/90" asChild>
-                    <Link href="/contact">
-                      Contactar Soporte Legal
-                      <ChevronRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Nota al pie */}
-            <div className="mt-8 text-center text-sm text-muted-foreground">
-              <p>
-                Estos términos están disponibles en múltiples idiomas. En caso de conflicto, la versión en español
-                prevalecerá.
-              </p>
-            </div>
           </div>
         </section>
       </main>

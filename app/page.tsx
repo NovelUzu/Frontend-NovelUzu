@@ -105,15 +105,22 @@ export default function HomePage() {
                 </p>
               </div>
             </div>
+            
             {/* Tabs con scroll horizontal en dispositivos móviles */}
             <Tabs defaultValue="trending" className="mt-8">
-              <div className="flex items-center justify-between">
-                <TabsList className="overflow-x-auto pb-1 w-auto">
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <TabsList className="grid w-full grid-cols-3 sm:w-auto sm:flex">
                   <TabsTrigger value="trending">Tendencia</TabsTrigger>
                   <TabsTrigger value="new">Nuevas</TabsTrigger>
                   <TabsTrigger value="completed">Completadas</TabsTrigger>
                 </TabsList>
-                <Button variant="link" size="sm" className="whitespace-nowrap text-primary" asChild>
+                
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="whitespace-nowrap text-primary self-end sm:self-auto"
+                  asChild
+                >
                   <Link href="/explore">Ver todas</Link>
                 </Button>
               </div>
@@ -283,10 +290,10 @@ export default function HomePage() {
                 { name: "Drama", color: "gradient-drama" },
                 { name: "Misterio", color: "gradient-mystery" },
                 { name: "Horror", color: "gradient-horror" },
-                { name: "Histórico", color: "gradient-drama" },
-                { name: "Comedia", color: "gradient-adventure" },
-                { name: "Sobrenatural", color: "gradient-mystery" },
-                { name: "Artes Marciales", color: "gradient-action" },
+                { name: "Histórico", color: "gradient-historical" },
+                { name: "Comedia", color: "gradient-comedy" },
+                { name: "Sobrenatural", color: "gradient-supernatural" },
+                { name: "Artes Marciales", color: "gradient-martialarts" },
               ].map((genre) => (
                 <Link href={`/genre/${normalizeUrl(genre.name)}`} key={genre.name}>
                   <div

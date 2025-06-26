@@ -140,3 +140,19 @@
 .gradient-horror {
   @apply bg-gradient-to-r from-horror-dark to-horror;
 }
+
+.gradient-historical {
+  @apply bg-gradient-to-r from-drama-dark to-historical;
+}
+
+.gradient-comedy {
+  @apply bg-gradient-to-r from-adventure-dark to-comedy;
+}
+
+.gradient-supernatural {
+  @apply bg-gradient-to-r from-mystery-dark to-supernatural;
+}
+
+.gradient-martialarts {
+  @apply bg-gradient-to-r from-action-dark to-martialarts;
+}

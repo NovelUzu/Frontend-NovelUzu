@@ -6,10 +6,8 @@
  * - Información sobre recopilación y uso de datos
  * - Derechos del usuario
  */
-import Link from "next/link"
-import { Shield, Eye, Database, Lock, UserCheck, Globe, Mail, Phone } from "lucide-react"
+import { Shield, Eye, Database, Lock, UserCheck, Globe, } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
@@ -74,48 +72,22 @@ export default function PrivacyPage() {
         "Derecho de acceso: puede solicitar una copia de la información personal que tenemos sobre usted.",
         "Derecho de rectificación: puede corregir información inexacta o incompleta.",
         "Derecho de eliminación: puede solicitar que eliminemos su información personal.",
-        "Derecho de portabilidad: puede solicitar sus datos en un formato estructurado y legible.",
         "Derecho de oposición: puede oponerse al procesamiento de sus datos para ciertos fines.",
       ],
     },
     {
-      id: "cookies",
-      title: "6. Cookies y Tecnologías de Seguimiento",
-      icon: <Database className="h-5 w-5" />,
-      content: [
-        "Utilizamos cookies esenciales para el funcionamiento básico del sitio web.",
-        "Cookies de rendimiento para analizar cómo los usuarios interactúan con nuestro sitio.",
-        "Cookies de funcionalidad para recordar sus preferencias y configuraciones.",
-        "Puede controlar las cookies a través de la configuración de su navegador.",
-        "Algunas funciones pueden no estar disponibles si deshabilita las cookies.",
-      ],
-    },
-    {
       id: "data-retention",
-      title: "7. Retención de Datos",
+      title: "6. Retención de Datos",
       icon: <Database className="h-5 w-5" />,
       content: [
         "Conservamos su información personal solo durante el tiempo necesario para los fines descritos.",
         "Datos de cuenta activa se conservan mientras mantenga su cuenta abierta.",
-        "Información de uso se conserva por un período de 2 años para análisis y mejoras.",
-        "Algunos datos pueden conservarse por períodos más largos según requisitos legales.",
         "Puede solicitar la eliminación de sus datos en cualquier momento.",
       ],
     },
     {
-      id: "international-transfers",
-      title: "8. Transferencias Internacionales",
-      icon: <Globe className="h-5 w-5" />,
-      content: [
-        "Sus datos pueden ser transferidos y procesados en países fuera de su residencia.",
-        "Implementamos salvaguardas apropiadas para proteger sus datos durante transferencias.",
-        "Cumplimos con regulaciones internacionales de protección de datos aplicables.",
-        "Puede contactarnos para obtener más información sobre las salvaguardas implementadas.",
-      ],
-    },
-    {
       id: "children-privacy",
-      title: "9. Privacidad de Menores",
+      title: "7. Privacidad de Menores",
       icon: <Shield className="h-5 w-5" />,
       content: [
         "Nuestros servicios no están dirigidos a menores de 13 años.",
@@ -126,7 +98,7 @@ export default function PrivacyPage() {
     },
     {
       id: "policy-changes",
-      title: "10. Cambios a esta Política",
+      title: "8. Cambios a esta Política",
       icon: <Eye className="h-5 w-5" />,
       content: [
         "Podemos actualizar esta política de privacidad ocasionalmente para reflejar cambios en nuestras prácticas.",
@@ -237,36 +209,6 @@ export default function PrivacyPage() {
                 </Card>
               ))}
             </div>
-
-            {/* Contacto para Privacidad */}
-            <Card className="mt-12 gradient-fantasy text-white">
-              <CardHeader>
-                <CardTitle className="text-xl md:text-2xl">¿Preguntas sobre Privacidad?</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <h4 className="font-semibold mb-2 flex items-center">
-                      <Mail className="h-4 w-4 mr-2" />
-                      Oficial de Privacidad
-                    </h4>
-                    <p className="text-white/90">privacy@noveluzu.com</p>
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-2 flex items-center">
-                      <Phone className="h-4 w-4 mr-2" />
-                      Línea de Privacidad
-                    </h4>
-                    <p className="text-white/90">+1 (555) 123-PRIVACY</p>
-                  </div>
-                </div>
-                <div className="mt-6">
-                  <Button className="bg-white text-fantasy hover:bg-white/90" asChild>
-                    <Link href="/contact">Contactar sobre Privacidad</Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </section>
       </main>
