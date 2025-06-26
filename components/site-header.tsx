@@ -93,15 +93,15 @@ export function SiteHeader() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="rounded-full h-8 w-8 ml-1">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={user?.avatar || "/placeholder.jpg"} alt={user?.username} />
-                    <AvatarFallback>{user?.username?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
+                    <AvatarImage src={user?.avatar || "/placeholder.jpg"} alt={user?.email || "User"} />
+                    <AvatarFallback>{user?.name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{user?.username}</p>
+                    <p className="text-sm font-medium leading-none">{user?.name || "Usuario"}</p>
                     <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
                   </div>
                 </DropdownMenuLabel>
@@ -209,11 +209,11 @@ export function SiteHeader() {
               <div className="flex flex-col gap-2 border-t pt-2">
                 <div className="flex items-center gap-2 p-2">
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src={user?.avatar || "/placeholder.jpg"} alt={user?.username} />
-                    <AvatarFallback>{user?.username?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
+                    <AvatarImage src={user?.avatar || "/placeholder.jpg"} alt={user?.name || "User"} />
+                    <AvatarFallback>{user?.name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="text-sm font-medium">{user?.username}</p>
+                    <p className="text-sm font-medium">{user?.name}</p>
                     <p className="text-xs text-muted-foreground">{user?.email}</p>
                   </div>
                 </div>
