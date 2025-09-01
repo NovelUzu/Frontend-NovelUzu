@@ -1,16 +1,31 @@
+"use client"
+
 import Link from "next/link"
 import Image from "next/image"
 import { BookOpen, ChevronRight, Filter, Moon, Search, Star, Sun } from "lucide-react"
+import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 
 export default function ExplorePage() {
+  const [visibleItems, setVisibleItems] = useState(16)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleLoadMore = async () => {
+    setIsLoading(true)
+    // Simulate loading delay
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    setVisibleItems((prev) => prev + 16)
+    setIsLoading(false)
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
@@ -57,33 +72,56 @@ export default function ExplorePage() {
           </div>
 
           {/* Tabs responsivos con scroll horizontal en móvil */}
-          <div className="mb-4 sm:mb-6 md:mb-8 overflow-x-auto pb-2">
+          <div className="mb-4 sm:mb-6 md:mb-8">
             <Tabs defaultValue="all" className="w-full">
-              <TabsList className="w-max min-w-full">
-                <TabsTrigger value="all" className="text-xs sm:text-sm">
-                  Todos
-                </TabsTrigger>
-                <TabsTrigger value="fantasy" className="text-xs sm:text-sm">
-                  Fantasía
-                </TabsTrigger>
-                <TabsTrigger value="action" className="text-xs sm:text-sm">
-                  Acción
-                </TabsTrigger>
-                <TabsTrigger value="romance" className="text-xs sm:text-sm">
-                  Romance
-                </TabsTrigger>
-                <TabsTrigger value="scifi" className="text-xs sm:text-sm">
-                  Ciencia Ficción
-                </TabsTrigger>
-                <TabsTrigger value="drama" className="text-xs sm:text-sm">
-                  Drama
-                </TabsTrigger>
-              </TabsList>
+              <ScrollArea className="w-full whitespace-nowrap">
+                <TabsList className="inline-flex w-max min-w-full h-auto p-1 bg-muted rounded-lg">
+                  <TabsTrigger value="all" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
+                    Todos
+                  </TabsTrigger>
+                  <TabsTrigger value="fantasy" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
+                    Fantasía
+                  </TabsTrigger>
+                  <TabsTrigger value="action" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
+                    Acción
+                  </TabsTrigger>
+                  <TabsTrigger value="romance" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
+                    Romance
+                  </TabsTrigger>
+                  <TabsTrigger value="adventure" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
+                    Aventura
+                  </TabsTrigger>
+                  <TabsTrigger value="scifi" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
+                    Ciencia Ficción
+                  </TabsTrigger>
+                  <TabsTrigger value="drama" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
+                    Drama
+                  </TabsTrigger>
+                  <TabsTrigger value="mystery" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
+                    Misterio
+                  </TabsTrigger>
+                  <TabsTrigger value="horror" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
+                    Terror
+                  </TabsTrigger>
+                  <TabsTrigger value="historical" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
+                    Histórico
+                  </TabsTrigger>
+                  <TabsTrigger value="comedy" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
+                    Comedia
+                  </TabsTrigger>
+                  <TabsTrigger value="supernatural" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
+                    Sobrenatural
+                  </TabsTrigger>
+                  <TabsTrigger value="martialarts" className="text-xs sm:text-sm whitespace-nowrap px-3 py-2">
+                    Artes Marciales
+                  </TabsTrigger>
+                </TabsList>
+                <ScrollBar orientation="horizontal" className="bg-white dark:bg-[#18181b]" />
+              </ScrollArea>
 
-              {/* Contenido de las tabs con grid responsivo */}
               <TabsContent value="all" className="mt-4 sm:mt-6">
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                  {[...Array(16)].map((_, i) => (
+                  {[...Array(visibleItems)].map((_, i) => (
                     <Card key={i} className="overflow-hidden border">
                       <Link href={`/novel/${i + 1}`}>
                         <div className="relative">
@@ -135,7 +173,14 @@ export default function ExplorePage() {
                   ))}
                 </div>
                 <div className="mt-6 sm:mt-8 flex justify-center">
-                  <Button variant="outline">Cargar más</Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleLoadMore}
+                    disabled={isLoading}
+                    className="min-w-[120px] bg-transparent"
+                  >
+                    {isLoading ? "Cargando..." : "Cargar más"}
+                  </Button>
                 </div>
               </TabsContent>
 

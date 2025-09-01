@@ -18,6 +18,8 @@ import { useToast } from "@/hooks/use-toast"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { useAuth } from "@/lib/auth-context"
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook } from "react-icons/fa";
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -239,11 +241,13 @@ export default function RegisterPage() {
               <Separator className="flex-1" />
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full flex items-center justify-center gap-2">
                 Google
+                <FcGoogle className="h-5 w-5" />
               </Button>
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full flex items-center justify-center gap-2">
                 Facebook
+                <FaFacebook className="h-5 w-5 text-[#1877F2]" />
               </Button>
             </div>
           </CardContent>

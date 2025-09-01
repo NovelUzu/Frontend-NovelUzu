@@ -156,7 +156,6 @@ export default function GenresPage() {
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input placeholder="Buscar géneros..." className="pl-10" />
             </div>
-            <Button variant="outline">Géneros populares</Button>
           </div>
 
           {/* Grid de géneros con colores personalizados */}
@@ -193,7 +192,7 @@ export default function GenresPage() {
             ))}
           </div>
 
-          {/* Sección de novelas destacadas por género */}
+          {/* Sección de novelas destacadas por género
           <div className="mt-12">
             <h2 className="mb-6 text-2xl font-bold">Novelas destacadas por género</h2>
             <div className="space-y-12">
@@ -259,9 +258,9 @@ export default function GenresPage() {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
-          {/* Banner CTA con color de fondo */}
+          {/* Banner CTA con color de fondo
           <div className="mt-12 rounded-lg border overflow-hidden">
             <div className="bg-purple-600 p-6 text-white">
               <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
@@ -276,7 +275,7 @@ export default function GenresPage() {
                 </Button>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </main>
       <SiteFooter />

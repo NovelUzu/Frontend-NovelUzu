@@ -32,7 +32,6 @@ export default function LatestPage() {
             <TabsList>
               <TabsTrigger value="recent-chapters">Capítulos Recientes</TabsTrigger>
               <TabsTrigger value="new-novels">Nuevas Novelas</TabsTrigger>
-              <TabsTrigger value="updates">Actualizaciones</TabsTrigger>
             </TabsList>
 
             <TabsContent value="recent-chapters" className="mt-6">
@@ -250,7 +249,7 @@ export default function LatestPage() {
             </TabsContent>
           </Tabs>
 
-          <div className="mt-12 rounded-lg border bg-muted/40 p-6 dark:bg-muted/10">
+          {/* <div className="mt-12 rounded-lg border bg-muted/40 p-6 dark:bg-muted/10">
             <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
               <div>
                 <h2 className="text-xl font-bold">¿Quieres recibir notificaciones de nuevos capítulos?</h2>
@@ -260,9 +259,9 @@ export default function LatestPage() {
               </div>
               <Button className="whitespace-nowrap">Activar notificaciones</Button>
             </div>
-          </div>
+          </div> */}
 
-          <div className="mt-12">
+          {/* <div className="mt-12">
             <h2 className="mb-6 text-2xl font-bold">Calendario de publicaciones</h2>
             <div className="overflow-x-auto">
               <div className="min-w-[800px]">
@@ -309,7 +308,7 @@ export default function LatestPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </main>
       <SiteFooter />

@@ -51,13 +51,13 @@ export default function UserProfilePage() {
           <div className="mb-8 flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:gap-8">
             {/* Avatar del usuario */}
             <Avatar className="h-20 w-20 sm:h-24 sm:w-24 border-4 border-background">
-              <AvatarImage src={user?.avatar || "/placeholder.jpg"} alt={user?.username} />
-              <AvatarFallback>{user?.username?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
+              <AvatarImage src={user?.avatar || "/placeholder.jpg"} alt={user?.name} />
+              <AvatarFallback>{user?.name?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
             </Avatar>
 
             {/* Información del perfil */}
             <div className="flex flex-1 flex-col items-center gap-2 text-center sm:items-start sm:text-left">
-              <h1 className="text-2xl sm:text-3xl font-bold">{user?.username}</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold">{user?.name}</h1>
               <p className="text-sm text-muted-foreground">Miembro desde Mayo 2023</p>
 
               {/* Estadísticas del usuario - Diseño flexible */}
@@ -79,7 +79,7 @@ export default function UserProfilePage() {
 
             {/* Botón de editar perfil */}
             <Button variant="outline" size="sm" className="gap-2" asChild>
-              <Link href="/user/edit-profile">
+              <Link href="/user/profile/edit-profile">
                 <Settings className="h-4 w-4" />
                 Editar Perfil
               </Link>

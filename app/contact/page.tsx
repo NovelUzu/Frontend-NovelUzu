@@ -111,7 +111,7 @@ export default function ContactPage() {
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="font-medium">Domingos:</span>
-                        <span className="text-muted-foreground">Cerrado</span>
+                        <span>Cerrado</span>
                       </div>
                     </div>
                   </CardContent>
