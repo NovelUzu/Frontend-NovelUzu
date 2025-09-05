@@ -2,10 +2,12 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react"
+import { FcGoogle } from "react-icons/fc"
+import { FaFacebook } from "react-icons/fa"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -13,13 +15,10 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useToast } from "@/hooks/use-toast"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 import { useAuth } from "@/lib/auth-context"
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebook } from "react-icons/fa";
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -32,28 +31,21 @@ export default function RegisterPage() {
     email: "",
     password: "",
     confirmPassword: "",
-    role: "lector", // Valor por defecto: lector
     acceptTerms: false,
   })
 
   // Si ya está autenticado, redirigir al perfil
-  if (isAuthenticated) {
-    router.push("/user/profile")
-    return null
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/user/profile")
+    }
+  }, [isAuthenticated, router])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
     setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
-    }))
-  }
-
-  const handleRoleChange = (value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      role: value,
     }))
   }
 
@@ -76,27 +68,45 @@ export default function RegisterPage() {
       return
     }
 
+    if (formData.password.length < 6) {
+      toast({
+        title: "Error",
+        description: "La contraseña debe tener al menos 6 caracteres",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (!formData.acceptTerms) {
+      toast({
+        title: "Error",
+        description: "Debes aceptar los términos y condiciones",
+        variant: "destructive",
+      })
+      return
+    }
+
     setIsLoading(true)
 
     try {
-      // Registro con el rol seleccionado
+      // Registro con rol de usuario por defecto
       await register(
         formData.username,
         formData.email,
         formData.password,
-        formData.role as "lector" | "escritor" | "admin",
+        "usuario", // Todos se registran como usuarios
       )
 
       toast({
         title: "Registro exitoso",
-        description: "Bienvenido a NovelUzu",
+        description: "Tu cuenta ha sido creada exitosamente. Ahora puedes iniciar sesión.",
       })
-      router.push("/user/profile")
-    } catch (error) {
+      router.push("/login")
+    } catch (error: any) {
       console.error("Error al registrarse:", error)
       toast({
         title: "Error",
-        description: "Ocurrió un error al registrarse. Inténtalo de nuevo más tarde.",
+        description: error.message || "Ocurrió un error al registrarse. Inténtalo de nuevo más tarde.",
         variant: "destructive",
       })
     } finally {
@@ -110,8 +120,8 @@ export default function RegisterPage() {
       <main className="flex-1 flex items-center justify-center p-4 md:p-8">
         <Card className="mx-auto w-full max-w-md">
           <CardHeader className="space-y-1 text-center">
-            <CardTitle className="text-2xl font-bold">Crear una cuenta</CardTitle>
-            <CardDescription>Ingresa tus datos para registrarte en NovelUzu</CardDescription>
+            <CardTitle className="text-2xl font-bold">Únete a NovelUzu</CardTitle>
+            <CardDescription>Crea tu cuenta y comienza a leer y escribir novelas increíbles</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -127,6 +137,8 @@ export default function RegisterPage() {
                     value={formData.username}
                     onChange={handleChange}
                     required
+                    minLength={3}
+                    maxLength={50}
                   />
                 </div>
               </div>
@@ -159,7 +171,7 @@ export default function RegisterPage() {
                     value={formData.password}
                     onChange={handleChange}
                     required
-                    minLength={8}
+                    minLength={6}
                   />
                   <Button
                     type="button"
@@ -172,6 +184,7 @@ export default function RegisterPage() {
                     <span className="sr-only">{showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}</span>
                   </Button>
                 </div>
+                <p className="text-xs text-muted-foreground">Mínimo 6 caracteres</p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
@@ -190,33 +203,16 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              {/* Selección de rol: lector o escritor */}
-              <div className="space-y-2">
-                <Label>Tipo de cuenta</Label>
-                <RadioGroup
-                  value={formData.role}
-                  onValueChange={handleRoleChange}
-                  className="flex flex-col space-y-2 mt-2"
-                >
-                  <div className="flex items-center space-x-2 rounded-md border p-3">
-                    <RadioGroupItem value="lector" id="lector" />
-                    <Label htmlFor="lector" className="flex-1 cursor-pointer font-medium">
-                      Lector
-                      <p className="text-sm font-normal text-muted-foreground">
-                        Descubre y lee novelas de tus autores favoritos
-                      </p>
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2 rounded-md border p-3">
-                    <RadioGroupItem value="escritor" id="escritor" />
-                    <Label htmlFor="escritor" className="flex-1 cursor-pointer font-medium">
-                      Escritor
-                      <p className="text-sm font-normal text-muted-foreground">
-                        Publica tus propias novelas y conecta con tus lectores
-                      </p>
-                    </Label>
-                  </div>
-                </RadioGroup>
+              {/* Información sobre las capacidades de la cuenta */}
+              <div className="rounded-lg border bg-muted/50 p-4">
+                <h4 className="text-sm font-medium mb-2">Con tu cuenta podrás:</h4>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  <li>• Leer miles de novelas gratuitas</li>
+                  <li>• Escribir y publicar tus propias historias</li>
+                  <li>• Comentar y valorar novelas</li>
+                  <li>• Crear tu biblioteca personal</li>
+                  <li>• Seguir a tus autores favoritos</li>
+                </ul>
               </div>
 
               <div className="flex items-center space-x-2">
@@ -232,7 +228,7 @@ export default function RegisterPage() {
                 </label>
               </div>
               <Button type="submit" className="w-full" disabled={isLoading || !formData.acceptTerms}>
-                {isLoading ? "Registrando..." : "Registrarse"}
+                {isLoading ? "Registrando..." : "Crear mi cuenta"}
               </Button>
             </form>
             <div className="mt-4 flex items-center">
@@ -241,11 +237,11 @@ export default function RegisterPage() {
               <Separator className="flex-1" />
             </div>
             <div className="mt-4 grid grid-cols-2 gap-2">
-              <Button variant="outline" className="w-full flex items-center justify-center gap-2">
+              <Button variant="outline" className="w-full flex items-center justify-center gap-2 bg-transparent">
                 Google
                 <FcGoogle className="h-5 w-5" />
               </Button>
-              <Button variant="outline" className="w-full flex items-center justify-center gap-2">
+              <Button variant="outline" className="w-full flex items-center justify-center gap-2 bg-transparent">
                 Facebook
                 <FaFacebook className="h-5 w-5 text-[#1877F2]" />
               </Button>

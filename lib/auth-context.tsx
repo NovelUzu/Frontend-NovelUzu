@@ -1,9 +1,10 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { apiService, type User as ApiUser } from "./api"
 
-// Definimos los tipos de roles disponibles
-export type UserRole = "lector" | "escritor" | "admin"
+// Definimos los tipos de roles disponibles (simplificado)
+export type UserRole = "usuario" | "admin"
 
 // Interfaz para el elemento de biblioteca
 export interface LibraryItem {
@@ -15,11 +16,9 @@ export interface LibraryItem {
   progress?: number
 }
 
-// Interfaz para el usuario
-export interface User {
+// Interfaz para el usuario (extendida de la API)
+export interface User extends ApiUser {
   id: string
-  name: string
-  email: string
   role: UserRole
   avatar?: string
   library: LibraryItem[]
@@ -57,49 +56,128 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
-  // Cargar usuario desde localStorage al iniciar
-  useEffect(() => {
-    const storedUser = localStorage.getItem("noveluzu_user")
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser))
-      } catch (error) {
-        console.error("Error al parsear usuario almacenado:", error)
-        localStorage.removeItem("noveluzu_user")
-      }
-    }
-    setIsLoading(false)
-  }, [])
-
-  // Guardar usuario en localStorage cuando cambie
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem("noveluzu_user", JSON.stringify(user))
+  // Función para sincronizar el estado del usuario
+  const syncUserState = (userData: User | null) => {
+    setUser(userData)
+    if (userData) {
+      localStorage.setItem("noveluzu_user", JSON.stringify(userData))
     } else {
       localStorage.removeItem("noveluzu_user")
+      localStorage.removeItem("noveluzu_token")
     }
-  }, [user])
+  }
+
+  // Cargar usuario desde localStorage al iniciar
+  useEffect(() => {
+    const initializeAuth = async () => {
+      const storedUser = localStorage.getItem("noveluzu_user")
+      const storedToken = localStorage.getItem("noveluzu_token")
+
+      if (storedUser && storedToken) {
+        try {
+          const parsedUser = JSON.parse(storedUser)
+          setUser(parsedUser)
+        } catch (error) {
+          console.error("Error al parsear usuario almacenado:", error)
+          localStorage.removeItem("noveluzu_user")
+          localStorage.removeItem("noveluzu_token")
+        }
+      }
+      setIsLoading(false)
+    }
+
+    initializeAuth()
+  }, [])
+
+  // Escuchar cambios en localStorage para sincronizar entre pestañas
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "noveluzu_user") {
+        if (e.newValue) {
+          try {
+            const newUser = JSON.parse(e.newValue)
+            setUser(newUser)
+          } catch (error) {
+            console.error("Error al parsear usuario desde storage event:", error)
+          }
+        } else {
+          // Si se eliminó el usuario, cerrar sesión en todas las pestañas
+          setUser(null)
+        }
+      }
+
+      if (e.key === "noveluzu_token" && !e.newValue) {
+        // Si se eliminó el token, cerrar sesión en todas las pestañas
+        setUser(null)
+      }
+    }
+
+    // Agregar listener para cambios en localStorage
+    window.addEventListener("storage", handleStorageChange)
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange)
+    }
+  }, [])
+
+  // Escuchar eventos personalizados para sincronización inmediata en la misma pestaña
+  useEffect(() => {
+    const handleAuthChange = (e: CustomEvent) => {
+      const { type, user: userData } = e.detail
+
+      if (type === "login") {
+        setUser(userData)
+      } else if (type === "logout") {
+        setUser(null)
+      } else if (type === "update") {
+        setUser(userData)
+      }
+    }
+
+    window.addEventListener("auth-change" as any, handleAuthChange)
+
+    return () => {
+      window.removeEventListener("auth-change" as any, handleAuthChange)
+    }
+  }, [])
+
+  // Función para disparar eventos de cambio de autenticación
+  const dispatchAuthChange = (type: "login" | "logout" | "update", userData?: User | null) => {
+    const event = new CustomEvent("auth-change", {
+      detail: { type, user: userData },
+    })
+    window.dispatchEvent(event)
+  }
 
   // Función para iniciar sesión
   const login = async (email: string, password: string) => {
     setIsLoading(true)
     try {
-      // Simulación de autenticación
-      // En una implementación real, esto sería una llamada a una API
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const response = await apiService.login({ email, password })
 
-      // Datos de usuario de ejemplo
-      // En una implementación real, estos datos vendrían de la respuesta de la API
-      const mockUser: User = {
-        id: "1",
-        name: email.split("@")[0],
-        email,
-        role: email.includes("admin") ? "admin" : email.includes("escritor") ? "escritor" : "lector",
-        avatar: `/placeholder.jpg?height=40&width=40`,
-        library: [],
+      if (response.token) {
+        // Guardar token
+        localStorage.setItem("noveluzu_token", response.token)
+
+        // Determinar rol basado en email para compatibilidad con admin
+        const isAdmin = email === "admin@noveluzu.com" || email === "admin"
+
+        // Crear objeto de usuario completo
+        const fullUser: User = {
+          id: response.user?.email || email,
+          username: response.user?.username || email.split("@")[0],
+          email: response.user?.email || email,
+          role: isAdmin ? "admin" : "usuario",
+          avatar: `/placeholder.svg?height=40&width=40`,
+          library: [],
+        }
+
+        // Sincronizar estado y notificar a otras pestañas
+        syncUserState(fullUser)
+        dispatchAuthChange("login", fullUser)
+      } else {
+        throw new Error("No se recibió token de autenticación")
       }
-
-      setUser(mockUser)
     } catch (error) {
       console.error("Error al iniciar sesión:", error)
       throw error
@@ -112,22 +190,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const register = async (name: string, email: string, password: string, role: UserRole) => {
     setIsLoading(true)
     try {
-      // Simulación de registro
-      // En una implementación real, esto sería una llamada a una API
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      // Datos de usuario de ejemplo
-      // En una implementación real, estos datos vendrían de la respuesta de la API
-      const mockUser: User = {
-        id: Math.random().toString(36).substring(2, 9),
-        name,
+      const response = await apiService.signUp({
+        username: name,
         email,
-        role,
-        avatar: `/placeholder.jpg?height=40&width=40`,
-        library: [],
-      }
+        password,
+      })
 
-      setUser(mockUser)
+      // No hacer login automático después del registro
+      // Solo mostrar mensaje de éxito y redirigir a login
     } catch (error) {
       console.error("Error al registrar usuario:", error)
       throw error
@@ -137,14 +207,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   // Función para cerrar sesión
-  const logout = () => {
-    setUser(null)
+  const logout = async () => {
+    try {
+      await apiService.logout()
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error)
+    } finally {
+      // Sincronizar estado y notificar a otras pestañas
+      syncUserState(null)
+      dispatchAuthChange("logout")
+    }
   }
 
   // Función para actualizar datos del usuario
   const updateUser = (userData: Partial<User>) => {
     if (user) {
-      setUser({ ...user, ...userData })
+      const updatedUser = { ...user, ...userData }
+      // Sincronizar estado y notificar a otras pestañas
+      syncUserState(updatedUser)
+      dispatchAuthChange("update", updatedUser)
     }
   }
 
@@ -154,7 +235,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Verificar si la novela ya está en la biblioteca
       if (!user.library.some((item) => item.novelId === novel.novelId)) {
         const updatedLibrary = [...user.library, novel]
-        setUser({ ...user, library: updatedLibrary })
+        const updatedUser = { ...user, library: updatedLibrary }
+        // Sincronizar estado y notificar a otras pestañas
+        syncUserState(updatedUser)
+        dispatchAuthChange("update", updatedUser)
       }
     }
   }
@@ -163,7 +247,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const removeFromLibrary = (novelId: string) => {
     if (user) {
       const updatedLibrary = user.library.filter((item) => item.novelId !== novelId)
-      setUser({ ...user, library: updatedLibrary })
+      const updatedUser = { ...user, library: updatedLibrary }
+      // Sincronizar estado y notificar a otras pestañas
+      syncUserState(updatedUser)
+      dispatchAuthChange("update", updatedUser)
     }
   }
 
@@ -185,7 +272,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
         return item
       })
-      setUser({ ...user, library: updatedLibrary })
+      const updatedUser = { ...user, library: updatedLibrary }
+      // Sincronizar estado y notificar a otras pestañas
+      syncUserState(updatedUser)
+      dispatchAuthChange("update", updatedUser)
     }
   }
 
