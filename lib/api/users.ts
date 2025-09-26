@@ -24,6 +24,15 @@ export interface UpdateUserRequest {
   avatar?: File
 }
 
+export interface ChangePasswordRequest {
+  current_password: string
+  new_password: string
+}
+
+export interface DeleteAccountRequest {
+  password: string
+}
+
 export interface UserListResponse {
   users: User[]
   total: number
@@ -72,5 +81,38 @@ export const userService = {
     })
     
     return handleApiResponse(response)
+  },
+
+  // Cambiar contraseña del usuario
+  async changePassword(data: ChangePasswordRequest): Promise<{ message: string }> {
+    const formData = new FormData()
+    formData.append('current_password', data.current_password)
+    formData.append('new_password', data.new_password)
+
+    const response = await fetch(`${API_BASE_URL}/user/change-password`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('noveluzu_token')}`,
+      },
+      body: formData,
+    })
+    
+    return handleApiResponse<{ message: string }>(response)
+  },
+
+  // Eliminar cuenta del usuario
+  async deleteAccount(data: DeleteAccountRequest): Promise<{ message: string }> {
+    const formData = new FormData()
+    formData.append('password', data.password)
+
+    const response = await fetch(`${API_BASE_URL}/user/delete-account`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('noveluzu_token')}`,
+      },
+      body: formData,
+    })
+    
+    return handleApiResponse<{ message: string }>(response)
   },
 }

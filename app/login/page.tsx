@@ -149,13 +149,6 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            {/* Información para administradores */}
-            <div className="mt-4 p-3 bg-muted/50 rounded-lg">
-              <p className="text-xs text-muted-foreground text-center">
-                <strong>Administradores:</strong> Usa las credenciales configuradas en la base de datos
-              </p>
-            </div>
-
             <div className="mt-4 flex items-center">
               <Separator className="flex-1" />
               <span className="mx-2 text-xs text-muted-foreground">O inicia sesión con</span>

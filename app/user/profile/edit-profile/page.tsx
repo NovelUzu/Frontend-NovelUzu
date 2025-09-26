@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Camera, Save, X, User } from "lucide-react"
+import { Camera, Save, X, User, Shield, Eye, EyeOff, Trash2 } from "lucide-react"
 import { type UserRole, useAuth } from "@/lib/contexts/auth"
 import { api } from "@/lib/api"
 import { SiteHeader } from "@/components/site-header"
@@ -15,11 +15,12 @@ import { Textarea } from "@/components/ui/textarea"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
-
+import { SiteFooter } from "@/components/site-footer"
+import { storage } from "@/lib/contexts/auth/utils"
 
 export default function EditProfilePage() {
   const router = useRouter()
-  const { user, isLoading, isAuthenticated, refreshUser } = useAuth()
+  const { user, isLoading, isAuthenticated, refreshUser, logoutLocal } = useAuth()
   const { toast } = useToast()
 
   const [formData, setFormData] = useState({
@@ -31,8 +32,24 @@ export default function EditProfilePage() {
   })
   const [avatarPreview, setAvatarPreview] = useState<string>("")
 
+  // Estados para cambio de contraseña
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  })
+  const [showPasswords, setShowPasswords] = useState({
+    current: false,
+    new: false,
+    confirm: false,
+  })
+  const [isChangingPassword, setIsChangingPassword] = useState(false)
+
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [activeTab, setActiveTab] = useState("personal")
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false)
+  const [deletePassword, setDeletePassword] = useState("")
+  const [showDeletePassword, setShowDeletePassword] = useState(false)
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -54,6 +71,14 @@ export default function EditProfilePage() {
 
   const handleInputChange = (field: string, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const handlePasswordChange = (field: string, value: string) => {
+    setPasswordData((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const togglePasswordVisibility = (field: 'current' | 'new' | 'confirm') => {
+    setShowPasswords((prev) => ({ ...prev, [field]: !prev[field] }))
   }
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,6 +157,102 @@ export default function EditProfilePage() {
     }
   }
 
+  const handlePasswordSubmit = async () => {
+    setIsChangingPassword(true)
+
+    try {
+      // Validaciones frontend
+      if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
+        throw new Error("Todos los campos son requeridos")
+      }
+
+      if (passwordData.newPassword.length < 6) {
+        throw new Error("La nueva contraseña debe tener al menos 6 caracteres")
+      }
+
+      if (passwordData.newPassword !== passwordData.confirmPassword) {
+        throw new Error("Las contraseñas no coinciden")
+      }
+
+      if (passwordData.currentPassword === passwordData.newPassword) {
+        throw new Error("La nueva contraseña debe ser diferente a la actual")
+      }
+
+      // Llamada al backend para cambiar contraseña
+      await api.users.changePassword({
+        current_password: passwordData.currentPassword,
+        new_password: passwordData.newPassword,
+      })
+
+      toast({
+        title: "Contraseña actualizada",
+        description: "Tu contraseña ha sido cambiada exitosamente.",
+      })
+
+      // Limpiar formulario
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      })
+
+      // Redireccionar al perfil después de 1 segundo
+      setTimeout(() => {
+        router.push("/user/profile")
+      }, 1000)
+
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo cambiar la contraseña.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsChangingPassword(false)
+    }
+  }
+
+  const handleDeleteAccount = async () => {
+    setIsDeletingAccount(true)
+
+    try {
+      // Validar que se ingresó la contraseña
+      if (!deletePassword) {
+        throw new Error("Debes ingresar tu contraseña para confirmar la eliminación")
+      }
+
+      // Llamada al backend para eliminar cuenta
+      await api.users.deleteAccount({
+        password: deletePassword,
+      })
+
+      // Limpiar localStorage y sessionStorage y contexto de auth
+      logoutLocal()
+
+      toast({
+        title: "Cuenta eliminada",
+        description: "Tu cuenta ha sido eliminada exitosamente.",
+      })
+
+      // Limpiar contraseña
+      setDeletePassword("")
+
+      // Redireccionar después de eliminar
+      setTimeout(() => {
+        router.push("/")
+      }, 1000)
+
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo eliminar la cuenta.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsDeletingAccount(false)
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -157,10 +278,18 @@ export default function EditProfilePage() {
 
           <form onSubmit={handleSubmit}>
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-1">
+              <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="personal" className="flex items-center gap-2">
                   <User className="h-4 w-4" />
                   Información Personal
+                </TabsTrigger>
+                <TabsTrigger value="security" className="flex items-center gap-2">
+                  <Shield className="h-4 w-4" />
+                  Seguridad
+                </TabsTrigger>
+                <TabsTrigger value="danger" className="flex items-center gap-2 text-red-600">
+                  <Trash2 className="h-4 w-4" />
+                  Zona Peligrosa
                 </TabsTrigger>
               </TabsList>
 
@@ -248,32 +377,223 @@ export default function EditProfilePage() {
                     </div>
                   </CardContent>
                 </Card>
+
+                {/* Botones de acción - Para la pestaña personal */}
+                <div className="flex justify-end space-x-4 pt-6 border-t">
+                  <Button type="button" variant="outline" onClick={() => router.back()} disabled={isSubmitting}>
+                    <X className="h-4 w-4 mr-2" />
+                    Cancelar
+                  </Button>
+                  <Button type="submit" disabled={isSubmitting} className="min-w-[120px]">
+                    {isSubmitting ? (
+                      <div className="flex items-center">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Guardando...
+                      </div>
+                    ) : (
+                      <>
+                        <Save className="h-4 w-4 mr-2" />
+                        Guardar cambios
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </TabsContent>
+
+              {/* Seguridad - Cambio de contraseña */}
+              <TabsContent value="security" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Cambiar Contraseña</CardTitle>
+                    <CardDescription>Actualiza tu contraseña para mantener tu cuenta segura</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {/* Contraseña actual */}
+                      <div className="space-y-2">
+                        <Label htmlFor="currentPassword">Contraseña actual</Label>
+                        <div className="relative">
+                          <Input
+                            id="currentPassword"
+                            type={showPasswords.current ? "text" : "password"}
+                            value={passwordData.currentPassword}
+                            onChange={(e) => handlePasswordChange("currentPassword", e.target.value)}
+                            placeholder="Ingresa tu contraseña actual"
+                          />
+                          <button
+                            type="button"
+                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                            onClick={() => togglePasswordVisibility('current')}
+                          >
+                            {showPasswords.current ? (
+                              <EyeOff className="h-4 w-4 text-gray-400" />
+                            ) : (
+                              <Eye className="h-4 w-4 text-gray-400" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Nueva contraseña */}
+                      <div className="space-y-2">
+                        <Label htmlFor="newPassword">Nueva contraseña</Label>
+                        <div className="relative">
+                          <Input
+                            id="newPassword"
+                            type={showPasswords.new ? "text" : "password"}
+                            value={passwordData.newPassword}
+                            onChange={(e) => handlePasswordChange("newPassword", e.target.value)}
+                            placeholder="Ingresa tu nueva contraseña"
+                            minLength={6}
+                          />
+                          <button
+                            type="button"
+                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                            onClick={() => togglePasswordVisibility('new')}
+                          >
+                            {showPasswords.new ? (
+                              <EyeOff className="h-4 w-4 text-gray-400" />
+                            ) : (
+                              <Eye className="h-4 w-4 text-gray-400" />
+                            )}
+                          </button>
+                        </div>
+                        <p className="text-sm text-gray-500">Mínimo 6 caracteres</p>
+                      </div>
+
+                      {/* Confirmar contraseña */}
+                      <div className="space-y-2">
+                        <Label htmlFor="confirmPassword">Confirmar nueva contraseña</Label>
+                        <div className="relative">
+                          <Input
+                            id="confirmPassword"
+                            type={showPasswords.confirm ? "text" : "password"}
+                            value={passwordData.confirmPassword}
+                            onChange={(e) => handlePasswordChange("confirmPassword", e.target.value)}
+                            placeholder="Confirma tu nueva contraseña"
+                          />
+                          <button
+                            type="button"
+                            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                            onClick={() => togglePasswordVisibility('confirm')}
+                          >
+                            {showPasswords.confirm ? (
+                              <EyeOff className="h-4 w-4 text-gray-400" />
+                            ) : (
+                              <Eye className="h-4 w-4 text-gray-400" />
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Botones de acción - Para la pestaña seguridad */}
+                <div className="flex justify-end space-x-4 pt-6 border-t">
+                  <Button type="button" variant="outline" onClick={() => router.back()} disabled={isChangingPassword}>
+                    <X className="h-4 w-4 mr-2" />
+                    Cancelar
+                  </Button>
+                  <Button 
+                    type="button"
+                    onClick={handlePasswordSubmit}
+                    disabled={isChangingPassword}
+                    className="min-w-[120px]"
+                  >
+                    {isChangingPassword ? (
+                      <div className="flex items-center">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Cambiando...
+                      </div>
+                    ) : (
+                      <>
+                        <Shield className="h-4 w-4 mr-2" />
+                        Cambiar contraseña
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </TabsContent>
+
+              {/* Zona Peligrosa - Eliminar cuenta */}
+              <TabsContent value="danger" className="space-y-6">
+                <Card className="border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
+                  <CardHeader>
+                    <CardTitle className="text-red-900 dark:text-red-100">Zona Peligrosa</CardTitle>
+                    <CardDescription className="text-red-700 dark:text-red-300">
+                      Las acciones en esta sección no se pueden deshacer. Procede con precaución.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-6">
+                      <div className="p-4 border border-red-300 rounded-lg bg-white dark:bg-red-900 dark:border-red-700">
+                        <h3 className="font-medium text-red-900 dark:text-red-100 mb-2">Eliminar cuenta</h3>
+                        <p className="text-sm text-red-700 dark:text-red-300 mb-4">
+                          Una vez que elimines tu cuenta, no hay vuelta atrás. Por favor, asegúrate de que realmente quieres hacer esto.
+                        </p>
+                        
+                        {/* Campo de contraseña para confirmar eliminación */}
+                        <div className="space-y-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="deletePassword" className="text-red-900 dark:text-red-100">
+                              Confirma tu contraseña para eliminar la cuenta
+                            </Label>
+                            <div className="relative">
+                              <Input
+                                id="deletePassword"
+                                type={showDeletePassword ? "text" : "password"}
+                                value={deletePassword}
+                                onChange={(e) => setDeletePassword(e.target.value)}
+                                placeholder="Ingresa tu contraseña actual"
+                                className="border-red-300 focus:border-red-500"
+                                disabled={isDeletingAccount}
+                              />
+                              <button
+                                type="button"
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                onClick={() => setShowDeletePassword(!showDeletePassword)}
+                                disabled={isDeletingAccount}
+                              >
+                                {showDeletePassword ? (
+                                  <EyeOff className="h-4 w-4 text-gray-400" />
+                                ) : (
+                                  <Eye className="h-4 w-4 text-gray-400" />
+                                )}
+                              </button>
+                            </div>
+                          </div>
+
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            onClick={handleDeleteAccount}
+                            disabled={isDeletingAccount || !deletePassword}
+                            className="min-w-[140px]"
+                          >
+                            {isDeletingAccount ? (
+                              <div className="flex items-center">
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                Eliminando...
+                              </div>
+                            ) : (
+                              <>
+                                <Trash2 className="h-4 w-4 mr-2" />
+                                Eliminar cuenta
+                              </>
+                            )}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </TabsContent>
             </Tabs>
-
-            {/* Botones de acción */}
-            <div className="flex justify-end space-x-4 pt-6 border-t">
-              <Button type="button" variant="outline" onClick={() => router.back()} disabled={isSubmitting}>
-                <X className="h-4 w-4 mr-2" />
-                Cancelar
-              </Button>
-              <Button type="submit" disabled={isSubmitting} className="min-w-[120px]">
-                {isSubmitting ? (
-                  <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Guardando...
-                  </div>
-                ) : (
-                  <>
-                    <Save className="h-4 w-4 mr-2" />
-                    Guardar cambios
-                  </>
-                )}
-              </Button>
-            </div>
           </form>
         </div>
       </main>
+      <SiteFooter />
     </div>
   )
 }

@@ -29,7 +29,7 @@ interface AuthContextType {
   login: (credentials: LoginCredentials) => Promise<void>
   register: (data: RegisterData) => Promise<void>
   logout: () => Promise<void>
-  updateUser: (userData: Partial<AuthUser>) => void
+  logoutLocal: () => void
   refreshUser: () => Promise<void>
 }
 
@@ -159,14 +159,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  // Actualizar usuario
-  const updateUser = (userData: Partial<AuthUser>) => {
-    if (user) {
-      const updatedUser = { ...user, ...userData }
-      syncUserState(updatedUser)
-      authEvents.dispatch("update", { user: updatedUser })
-    }
-  }
 
   // Refrescar datos del usuario
   const refreshUser = async () => {
@@ -194,6 +186,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  // Función para logout local completo (para eliminación de cuenta)
+  const logoutLocal = () => {
+    // Limpiar estado del contexto
+    setUser(null)
+    setIsLoading(false)
+    
+    // Limpiar TODO el almacenamiento
+    if (typeof window !== 'undefined') {
+      localStorage.clear()
+      sessionStorage.clear()
+    }
+    
+    // Disparar evento de logout
+    authEvents.dispatch("logout")
+  }
+
   const value = {
     user,
     isLoading,
@@ -201,7 +209,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     login,
     register,
     logout,
-    updateUser,
+    logoutLocal,
     refreshUser,
   }
 

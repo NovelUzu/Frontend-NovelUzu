@@ -21,7 +21,7 @@ export interface AuthState {
 }
 
 // Eventos de autenticación
-export type AuthEventType = "login" | "logout" | "update" | "error"
+export type AuthEventType = "login" | "logout"
 
 export interface AuthEvent {
   type: AuthEventType
