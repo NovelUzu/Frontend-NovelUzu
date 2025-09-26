@@ -13,7 +13,8 @@ import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
-import { useAuth } from "@/lib/auth-context"
+import { useAuth } from "@/lib/contexts/auth"
+
 
 export default function UserProfilePage() {
   const router = useRouter()
@@ -54,7 +55,7 @@ export default function UserProfilePage() {
           <div className="mb-8 flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:gap-8">
             {/* Avatar del usuario */}
             <Avatar className="h-20 w-20 sm:h-24 sm:w-24 border-4 border-background">
-              <AvatarImage src={user?.avatar || "/placeholder.svg"} alt={user?.username} />
+              <AvatarImage src={user?.avatar_url + "/download" || "/placeholder.svg"} alt={user?.username} />
               <AvatarFallback>{user?.username?.charAt(0).toUpperCase() || "U"}</AvatarFallback>
             </Avatar>
 
@@ -217,7 +218,7 @@ export default function UserProfilePage() {
                       <Link href={`/novel/${i}`}>
                         <div className="relative aspect-[3/4] w-full">
                           <Image
-                            src={`/ceholder-svg-height-240-width-180-text-novela-.jpg?height=240&width=180&text=Novela ${i}`}
+                            src="/placeholder.svg"
                             fill
                             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                             alt={`Novela ${i}`}
@@ -284,7 +285,7 @@ export default function UserProfilePage() {
                     {/* Imagen de portada */}
                     <div className="relative w-full sm:w-auto mx-auto sm:mx-0 max-w-[120px] aspect-[3/4]">
                       <Image
-                        src={`/ceholder-svg-height-120-width-90-text-novela-.jpg?height=120&width=90&text=Novela ${i}`}
+                        src="/placeholder.svg"
                         fill
                         sizes="(max-width: 640px) 120px, 90px"
                         alt={`Novela ${i}`}
@@ -343,7 +344,7 @@ export default function UserProfilePage() {
                         <div className="flex items-center gap-3">
                           <div className="relative h-10 w-10 overflow-hidden rounded flex-shrink-0">
                             <Image
-                              src={`/ceholder-svg-height-60-width-45-text-novela-.jpg?height=60&width=45&text=Novela ${i}`}
+                              src="/placeholder.svg"
                               fill
                               sizes="40px"
                               alt={`Novela ${i}`}
@@ -420,7 +421,7 @@ export default function UserProfilePage() {
                       <Link href={`/novel/${i}`}>
                         <div className="relative aspect-[3/4] w-full">
                           <Image
-                            src={`/ceholder-svg-height-240-width-180-text-favorito-.jpg?height=240&width=180&text=Favorito ${i}`}
+                            src="/placeholder.svg"
                             fill
                             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                             alt={`Novela Favorita ${i}`}
@@ -494,7 +495,7 @@ export default function UserProfilePage() {
                       <div className="flex flex-col sm:flex-row">
                         <div className="relative w-full sm:w-[150px] aspect-[3/4] sm:aspect-auto">
                           <Image
-                            src={`/ceholder-svg-height-200-width-150-text-novela-.jpg?height=200&width=150&text=Novela ${i}`}
+                            src="/placeholder.svg"
                             fill
                             sizes="(max-width: 640px) 100vw, 150px"
                             alt={`Mi Novela ${i}`}

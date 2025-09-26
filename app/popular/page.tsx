@@ -70,7 +70,7 @@ export default function PopularPage() {
                     <div className="relative">
                       <Link href={`/novel/${i + 1}`}>
                         <Image
-                          src={`/placeholder.jpg?height=240&width=180&text=Top ${i + 1}`}
+                          src={`/placeholder.svg?height=240&width=180&text=Top ${i + 1}`}
                           width={180}
                           height={240}
                           alt={`Novela Top ${i + 1}`}
@@ -144,7 +144,7 @@ export default function PopularPage() {
                       {/* Imagen de portada con posición */}
                       <div className="relative h-28 w-20 flex-shrink-0 overflow-hidden rounded-md sm:h-36 sm:w-24 md:h-40 md:w-28">
                         <Image
-                          src={`/placeholder.jpg?height=160&width=120&text=Top ${i + 4}`}
+                          src={`/placeholder.svg?height=160&width=120&text=Top ${i + 4}`}
                           fill
                           alt={`Novela Top ${i + 4}`}
                           className="object-cover"
@@ -227,7 +227,7 @@ export default function PopularPage() {
                       {/* Imagen de portada con posición */}
                       <div className="relative h-36 w-full sm:h-auto sm:w-1/3">
                         <Image
-                          src={`/placeholder.jpg?height=160&width=120&text=Leída ${i + 1}`}
+                          src={`/placeholder.svg?height=160&width=120&text=Leída ${i + 1}`}
                           fill
                           alt={`Novela Más Leída ${i + 1}`}
                           className="object-cover"
@@ -293,7 +293,7 @@ export default function PopularPage() {
                       {/* Imagen de portada con posición */}
                       <div className="relative h-28 w-20 flex-shrink-0 overflow-hidden rounded-md sm:h-36 sm:w-24 md:h-40 md:w-28">
                         <Image
-                          src={`/placeholder.jpg?height=160&width=120&text=Rating ${i + 1}`}
+                          src={`/placeholder.svg?height=160&width=120&text=Rating ${i + 1}`}
                           fill
                           alt={`Novela Mejor Valorada ${i + 1}`}
                           className="object-cover"
@@ -380,7 +380,7 @@ export default function PopularPage() {
                     <div className="relative">
                       <Link href={`/novel/${i + 30}`}>
                         <Image
-                          src={`/placeholder.jpg?height=240&width=180&text=Rising ${i + 1}`}
+                          src={`/placeholder.svg?height=240&width=180&text=Rising ${i + 1}`}
                           width={180}
                           height={240}
                           alt={`Novela en Ascenso ${i + 1}`}
@@ -459,7 +459,7 @@ export default function PopularPage() {
                   <div className="flex items-center gap-3 md:gap-4">
                     <div className="relative h-14 w-10 flex-shrink-0 overflow-hidden rounded-md md:h-16 md:w-12">
                       <Image
-                        src="/placeholder.jpg?height=64&width=48&text=Top"
+                        src="/placeholder.svg?height=64&width=48&text=Top"
                         fill
                         alt="Novela más leída"
                         className="object-cover"
@@ -482,7 +482,7 @@ export default function PopularPage() {
                   <div className="flex items-center gap-3 md:gap-4">
                     <div className="relative h-14 w-10 flex-shrink-0 overflow-hidden rounded-md md:h-16 md:w-12">
                       <Image
-                        src="/placeholder.jpg?height=64&width=48&text=5★"
+                        src="/placeholder.svg?height=64&width=48&text=5★"
                         fill
                         alt="Novela mejor valorada"
                         className="object-cover"
@@ -508,7 +508,7 @@ export default function PopularPage() {
                   <div className="flex items-center gap-3 md:gap-4">
                     <div className="relative h-14 w-10 flex-shrink-0 overflow-hidden rounded-md md:h-16 md:w-12">
                       <Image
-                        src="/placeholder.jpg?height=64&width=48&text=↑"
+                        src="/placeholder.svg?height=64&width=48&text=↑"
                         fill
                         alt="Novela con mayor crecimiento"
                         className="object-cover"
@@ -534,7 +534,7 @@ export default function PopularPage() {
                   <div className="flex items-center gap-3 md:gap-4">
                     <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-full md:h-12 md:w-12">
                       <Image
-                        src="/placeholder.jpg?height=48&width=48&text=AF"
+                        src="/placeholder.svg?height=48&width=48&text=AF"
                         fill
                         alt="Autor más popular"
                         className="object-cover"

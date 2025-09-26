@@ -53,7 +53,7 @@ const mockUsers = [
     status: "active",
     lastLogin: "2023-05-18T14:32:00Z",
     registeredAt: "2023-01-10T09:15:00Z",
-    avatar: "/placeholder.jpg?height=40&width=40&text=AG",
+    avatar: "/placeholder.svg?height=40&width=40&text=AG",
     novels: 0,
     comments: 12,
   },
@@ -65,7 +65,7 @@ const mockUsers = [
     status: "active",
     lastLogin: "2023-05-19T10:45:00Z",
     registeredAt: "2023-02-05T11:20:00Z",
-    avatar: "/placeholder.jpg?height=40&width=40&text=CR",
+    avatar: "/placeholder.svg?height=40&width=40&text=CR",
     novels: 5,
     comments: 8,
   },
@@ -77,7 +77,7 @@ const mockUsers = [
     status: "active",
     lastLogin: "2023-05-20T08:15:00Z",
     registeredAt: "2022-11-15T14:30:00Z",
-    avatar: "/placeholder.jpg?height=40&width=40&text=EM",
+    avatar: "/placeholder.svg?height=40&width=40&text=EM",
     novels: 0,
     comments: 3,
   },
@@ -89,7 +89,7 @@ const mockUsers = [
     status: "inactive",
     lastLogin: "2023-04-10T16:20:00Z",
     registeredAt: "2023-03-22T09:45:00Z",
-    avatar: "/placeholder.jpg?height=40&width=40&text=DL",
+    avatar: "/placeholder.svg?height=40&width=40&text=DL",
     novels: 0,
     comments: 0,
   },
@@ -101,7 +101,7 @@ const mockUsers = [
     status: "active",
     lastLogin: "2023-05-17T11:30:00Z",
     registeredAt: "2023-01-28T13:10:00Z",
-    avatar: "/placeholder.jpg?height=40&width=40&text=SP",
+    avatar: "/placeholder.svg?height=40&width=40&text=SP",
     novels: 3,
     comments: 15,
   },
@@ -113,7 +113,7 @@ const mockUsers = [
     status: "active",
     lastLogin: "2023-05-15T09:20:00Z",
     registeredAt: "2023-02-14T10:25:00Z",
-    avatar: "/placeholder.jpg?height=40&width=40&text=MS",
+    avatar: "/placeholder.svg?height=40&width=40&text=MS",
     novels: 0,
     comments: 7,
   },
@@ -125,7 +125,7 @@ const mockUsers = [
     status: "suspended",
     lastLogin: "2023-04-05T14:10:00Z",
     registeredAt: "2022-12-08T15:40:00Z",
-    avatar: "/placeholder.jpg?height=40&width=40&text=LG",
+    avatar: "/placeholder.svg?height=40&width=40&text=LG",
     novels: 2,
     comments: 4,
   },
@@ -137,7 +137,7 @@ const mockUsers = [
     status: "active",
     lastLogin: "2023-05-16T17:45:00Z",
     registeredAt: "2023-03-01T08:30:00Z",
-    avatar: "/placeholder.jpg?height=40&width=40&text=JF",
+    avatar: "/placeholder.svg?height=40&width=40&text=JF",
     novels: 0,
     comments: 9,
   },
@@ -149,7 +149,7 @@ const mockUsers = [
     status: "active",
     lastLogin: "2023-05-18T13:15:00Z",
     registeredAt: "2023-01-15T11:50:00Z",
-    avatar: "/placeholder.jpg?height=40&width=40&text=CD",
+    avatar: "/placeholder.svg?height=40&width=40&text=CD",
     novels: 0,
     comments: 5,
   },
@@ -161,7 +161,7 @@ const mockUsers = [
     status: "active",
     lastLogin: "2023-05-19T15:30:00Z",
     registeredAt: "2023-02-20T09:15:00Z",
-    avatar: "/placeholder.jpg?height=40&width=40&text=PR",
+    avatar: "/placeholder.svg?height=40&width=40&text=PR",
     novels: 4,
     comments: 11,
   },
@@ -350,7 +350,7 @@ export default function AdminUsersPage() {
       status: "active",
       lastLogin: now,
       registeredAt: now,
-      avatar: `/placeholder.jpg?height=40&width=40&text=${newUser.name.charAt(0)}${newUser.name.split(" ")[1]?.charAt(0) || ""}`,
+      avatar: `/placeholder.svg?height=40&width=40&text=${newUser.name.charAt(0)}${newUser.name.split(" ")[1]?.charAt(0) || ""}`,
       novels: 0,
       comments: 0,
     }
@@ -744,7 +744,7 @@ export default function AdminUsersPage() {
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-3">
                         <Avatar className="h-8 w-8">
-                          <AvatarImage src={user.avatar || "/placeholder.jpg"} alt={user.name} />
+                          <AvatarImage src={user.avatar || "/placeholder.svg"} alt={user.name} />
                           <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div>
@@ -1086,7 +1086,7 @@ export default function AdminUsersPage() {
               <div className="py-4">
                 <div className="flex items-center gap-3 mb-4">
                   <Avatar className="h-10 w-10">
-                    <AvatarImage src={currentUser.avatar || "/placeholder.jpg"} alt={currentUser.name} />
+                    <AvatarImage src={currentUser.avatar || "/placeholder.svg"} alt={currentUser.name} />
                     <AvatarFallback>{currentUser.name.charAt(0)}</AvatarFallback>
                   </Avatar>
                   <div>

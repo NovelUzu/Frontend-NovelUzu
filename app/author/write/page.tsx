@@ -89,7 +89,7 @@ export default function AuthorWritePage() {
               Configuración
             </Button>
             <Avatar>
-              <AvatarImage src="/placeholder.jpg?height=32&width=32&text=A" alt="@autor" />
+              <AvatarImage src="/placeholder.svg?height=32&width=32&text=A" alt="@autor" />
               <AvatarFallback>A</AvatarFallback>
             </Avatar>
           </div>

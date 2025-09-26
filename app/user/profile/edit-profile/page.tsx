@@ -3,60 +3,36 @@
 import type React from "react"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
-import { Camera, Save, X, User, Globe, Twitter, Instagram, BookOpen, Award, Settings } from "lucide-react"
-import { type UserRole, useAuth } from "@/lib/auth-context"
+import { Camera, Save, X, User } from "lucide-react"
+import { type UserRole, useAuth } from "@/lib/contexts/auth"
+import { api } from "@/lib/api"
 import { SiteHeader } from "@/components/site-header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Switch } from "@/components/ui/switch"
-import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
+
 
 export default function EditProfilePage() {
   const router = useRouter()
-  const { user, updateUser, isLoading, isAuthenticated } = useAuth()
+  const { user, isLoading, isAuthenticated, refreshUser } = useAuth()
   const { toast } = useToast()
 
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
-    role: "lector" as UserRole,
     bio: "",
-    website: "",
-    twitter: "",
-    instagram: "",
-    avatar: "",
+    avatar: null as File | null,
     location: "",
     birthDate: "",
-    favoriteGenres: [] as string[],
-    readingGoal: 0,
-    publicProfile: true,
-    emailNotifications: true,
-    pushNotifications: false,
   })
+  const [avatarPreview, setAvatarPreview] = useState<string>("")
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [activeTab, setActiveTab] = useState("personal")
-
-  const genres = [
-    "Romance",
-    "Fantasía",
-    "Ciencia Ficción",
-    "Misterio",
-    "Terror",
-    "Aventura",
-    "Drama",
-    "Comedia",
-    "Histórica",
-    "Contemporánea",
-  ]
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -65,22 +41,14 @@ export default function EditProfilePage() {
 
     if (user) {
       setFormData({
-        name: user.name || "",
-        email: user.email || "",
-        role: user.role || "lector",
-        bio: "",
-        website: "",
-        twitter: "",
-        instagram: "",
-        avatar: user.avatar || "",
-        location: "",
-        birthDate: "",
-        favoriteGenres: [],
-        readingGoal: 12,
-        publicProfile: true,
-        emailNotifications: true,
-        pushNotifications: false,
+        name: user.username || "",
+        bio: user.bio || "",
+        avatar: null, // El archivo se manejará por separado
+        location: user.country || "",
+        birthDate: user.birth_date || "",
       })
+      // Establecer preview del avatar existente
+      setAvatarPreview(user.avatar_url + "/download" || "")
     }
   }, [user, isLoading, isAuthenticated, router])
 
@@ -88,21 +56,16 @@ export default function EditProfilePage() {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-  const handleGenreToggle = (genre: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      favoriteGenres: prev.favoriteGenres.includes(genre)
-        ? prev.favoriteGenres.filter((g) => g !== genre)
-        : [...prev.favoriteGenres, genre],
-    }))
-  }
-
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
+      // Guardar el archivo
+      setFormData((prev) => ({ ...prev, avatar: file }))
+      
+      // Crear preview para mostrar
       const reader = new FileReader()
       reader.onload = (e) => {
-        setFormData((prev) => ({ ...prev, avatar: e.target?.result as string }))
+        setAvatarPreview(e.target?.result as string)
       }
       reader.readAsDataURL(file)
     }
@@ -113,27 +76,55 @@ export default function EditProfilePage() {
     setIsSubmitting(true)
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      // Preparar datos para la API
+      const updateData: any = {}
+      
+      // Solo incluir campos que han cambiado y no están vacíos
+      if (formData.name && formData.name !== user?.username) {
+        updateData.username = formData.name
+      }
+      
+      if (formData.bio && formData.bio !== user?.bio) {
+        updateData.bio = formData.bio
+      }
+      
+      if (formData.location && formData.location !== user?.country) {
+        updateData.country = formData.location
+      }
+      
+      if (formData.birthDate && formData.birthDate !== user?.birth_date) {
+        updateData.birth_date = formData.birthDate
+      }
+      
+      if (formData.avatar) {
+        updateData.avatar = formData.avatar
+      }
 
-      updateUser({
-        name: formData.name,
-        email: formData.email,
-        role: formData.role,
-        avatar: formData.avatar,
-      })
+      // Solo actualizar si hay cambios
+      if (Object.keys(updateData).length > 0) {
+        const response = await api.users.updateProfile(updateData)
+        
+        // Actualizar los datos en memoria (contexto de auth)
+        await refreshUser()
+        
+        toast({
+          title: "Perfil actualizado",
+          description: "Tus cambios han sido guardados exitosamente.",
+        })
 
-      toast({
-        title: "Perfil actualizado",
-        description: "Tus cambios han sido guardados exitosamente.",
-      })
-
-      setTimeout(() => {
-        router.push("/user/profile")
-      }, 1000)
-    } catch (error) {
+        setTimeout(() => {
+          router.push("/user/profile")
+        }, 1000)
+      } else {
+        toast({
+          title: "Sin cambios",
+          description: "No hay cambios para guardar.",
+        })
+      }
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "No se pudo actualizar el perfil. Inténtalo de nuevo.",
+        description: error.message || "No se pudo actualizar el perfil. Inténtalo de nuevo.",
         variant: "destructive",
       })
     } finally {
@@ -166,22 +157,10 @@ export default function EditProfilePage() {
 
           <form onSubmit={handleSubmit}>
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-4">
+              <TabsList className="grid w-full grid-cols-1">
                 <TabsTrigger value="personal" className="flex items-center gap-2">
                   <User className="h-4 w-4" />
-                  Personal
-                </TabsTrigger>
-                <TabsTrigger value="social" className="flex items-center gap-2">
-                  <Globe className="h-4 w-4" />
-                  Social
-                </TabsTrigger>
-                <TabsTrigger value="preferences" className="flex items-center gap-2">
-                  <BookOpen className="h-4 w-4" />
-                  Preferencias
-                </TabsTrigger>
-                <TabsTrigger value="privacy" className="flex items-center gap-2">
-                  <Settings className="h-4 w-4" />
-                  Privacidad
+                  Información Personal
                 </TabsTrigger>
               </TabsList>
 
@@ -197,7 +176,7 @@ export default function EditProfilePage() {
                     <div className="flex items-center space-x-6">
                       <div className="relative">
                         <Avatar className="h-24 w-24">
-                          <AvatarImage src={formData.avatar || "/placeholder.svg"} alt="Avatar" />
+                          <AvatarImage src={avatarPreview || "/placeholder.svg"} alt="Avatar" />
                           <AvatarFallback className="text-lg">{formData.name.charAt(0).toUpperCase()}</AvatarFallback>
                         </Avatar>
                         <label
@@ -224,61 +203,23 @@ export default function EditProfilePage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label htmlFor="name">Nombre completo</Label>
+                        <Label htmlFor="name">Nombre de usuario</Label>
                         <Input
                           id="name"
                           value={formData.name}
                           onChange={(e) => handleInputChange("name", e.target.value)}
-                          placeholder="Tu nombre completo"
+                          placeholder="Tu nombre de usuario"
                           required
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="email">Correo electrónico</Label>
-                        <Input
-                          id="email"
-                          type="email"
-                          value={formData.email}
-                          onChange={(e) => handleInputChange("email", e.target.value)}
-                          placeholder="tu@email.com"
-                          required
-                        />
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="role">Tipo de cuenta</Label>
-                        <Select
-                          value={formData.role}
-                          onValueChange={(value) => handleInputChange("role", value as UserRole)}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="lector">
-                              <div className="flex items-center gap-2">
-                                <BookOpen className="h-4 w-4" />
-                                Lector
-                              </div>
-                            </SelectItem>
-                            <SelectItem value="escritor">
-                              <div className="flex items-center gap-2">
-                                <Award className="h-4 w-4" />
-                                Escritor
-                              </div>
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="location">Ubicación</Label>
+                        <Label htmlFor="location">País</Label>
                         <Input
                           id="location"
                           value={formData.location}
                           onChange={(e) => handleInputChange("location", e.target.value)}
-                          placeholder="Ciudad, País"
+                          placeholder="Tu país"
                         />
                       </div>
 
@@ -304,161 +245,6 @@ export default function EditProfilePage() {
                         maxLength={500}
                       />
                       <p className="text-sm text-gray-500">{formData.bio.length}/500 caracteres</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Redes Sociales */}
-              <TabsContent value="social" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Redes Sociales</CardTitle>
-                    <CardDescription>Conecta tus redes sociales para que otros puedan encontrarte</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label htmlFor="website">Sitio web</Label>
-                        <div className="relative">
-                          <Globe className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input
-                            id="website"
-                            type="url"
-                            value={formData.website}
-                            onChange={(e) => handleInputChange("website", e.target.value)}
-                            placeholder="https://tu-sitio.com"
-                            className="pl-10"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="twitter">Twitter</Label>
-                        <div className="relative">
-                          <Twitter className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input
-                            id="twitter"
-                            value={formData.twitter}
-                            onChange={(e) => handleInputChange("twitter", e.target.value)}
-                            placeholder="@tu_usuario"
-                            className="pl-10"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="instagram">Instagram</Label>
-                        <div className="relative">
-                          <Instagram className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                          <Input
-                            id="instagram"
-                            value={formData.instagram}
-                            onChange={(e) => handleInputChange("instagram", e.target.value)}
-                            placeholder="@tu_usuario"
-                            className="pl-10"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Preferencias de Lectura */}
-              <TabsContent value="preferences" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Preferencias de Lectura</CardTitle>
-                    <CardDescription>Personaliza tu experiencia de lectura</CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="space-y-4">
-                      <Label>Géneros favoritos</Label>
-                      <div className="flex flex-wrap gap-2">
-                        {genres.map((genre) => (
-                          <Badge
-                            key={genre}
-                            variant={formData.favoriteGenres.includes(genre) ? "default" : "outline"}
-                            className="cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900"
-                            onClick={() => handleGenreToggle(genre)}
-                          >
-                            {genre}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="readingGoal">Meta de lectura anual</Label>
-                      <div className="flex items-center space-x-4">
-                        <Input
-                          id="readingGoal"
-                          type="number"
-                          min="0"
-                          max="365"
-                          value={formData.readingGoal}
-                          onChange={(e) => handleInputChange("readingGoal", Number.parseInt(e.target.value) || 0)}
-                          className="w-24"
-                        />
-                        <span className="text-sm text-gray-600 dark:text-gray-400">novelas por año</span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Configuración de Privacidad */}
-              <TabsContent value="privacy" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Configuración de Privacidad</CardTitle>
-                    <CardDescription>
-                      Controla quién puede ver tu información y cómo recibes notificaciones
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="space-y-6">
-                      <div className="flex items-center justify-between">
-                        <div className="space-y-0.5">
-                          <Label>Perfil público</Label>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">
-                            Permite que otros usuarios vean tu perfil
-                          </p>
-                        </div>
-                        <Switch
-                          checked={formData.publicProfile}
-                          onCheckedChange={(checked) => handleInputChange("publicProfile", checked)}
-                        />
-                      </div>
-
-                      <Separator />
-
-                      <div className="flex items-center justify-between">
-                        <div className="space-y-0.5">
-                          <Label>Notificaciones por email</Label>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">
-                            Recibe actualizaciones por correo electrónico
-                          </p>
-                        </div>
-                        <Switch
-                          checked={formData.emailNotifications}
-                          onCheckedChange={(checked) => handleInputChange("emailNotifications", checked)}
-                        />
-                      </div>
-
-                      <div className="flex items-center justify-between">
-                        <div className="space-y-0.5">
-                          <Label>Notificaciones push</Label>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">
-                            Recibe notificaciones en tiempo real
-                          </p>
-                        </div>
-                        <Switch
-                          checked={formData.pushNotifications}
-                          onCheckedChange={(checked) => handleInputChange("pushNotifications", checked)}
-                        />
-                      </div>
                     </div>
                   </CardContent>
                 </Card>

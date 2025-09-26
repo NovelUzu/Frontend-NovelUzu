@@ -406,7 +406,7 @@ export default function RankingsPage() {
         </div>
         <div className="relative h-32 w-24 overflow-hidden rounded-md sm:h-40 sm:w-28">
           <Image
-            src={`/placeholder.jpg?height=160&width=120&text=${novel.title.slice(0, 10)}`}
+            src={`/placeholder.svg?height=160&width=120&text=${novel.title.slice(0, 10)}`}
             fill
             alt={novel.title}
             className="object-cover"

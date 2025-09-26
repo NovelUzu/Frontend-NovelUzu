@@ -12,7 +12,7 @@ import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
-import { useAuth, type LibraryItem } from "@/lib/auth-context"
+import { useAuth, type LibraryItem } from "@/lib/contexts/auth"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
@@ -24,7 +24,7 @@ const mockLibrary: LibraryItem[] = [
   {
     novelId: "1",
     title: "El Ascenso del Héroe Legendario",
-    coverUrl: "/placeholder.jpg?height=240&width=180&text=Novela 1",
+    coverUrl: "/placeholder.svg?height=240&width=180&text=Novela 1",
     addedAt: "2023-05-10T14:32:00Z",
     lastReadChapter: 5,
     progress: 25,
@@ -32,7 +32,7 @@ const mockLibrary: LibraryItem[] = [
   {
     novelId: "2",
     title: "Crónicas del Reino Olvidado",
-    coverUrl: "/placeholder.jpg?height=240&width=180&text=Novela 2",
+    coverUrl: "/placeholder.svg?height=240&width=180&text=Novela 2",
     addedAt: "2023-05-15T10:45:00Z",
     lastReadChapter: 12,
     progress: 60,
@@ -40,13 +40,13 @@ const mockLibrary: LibraryItem[] = [
   {
     novelId: "3",
     title: "El Último Hechicero",
-    coverUrl: "/placeholder.jpg?height=240&width=180&text=Novela 3",
+    coverUrl: "/placeholder.svg?height=240&width=180&text=Novela 3",
     addedAt: "2023-05-18T08:15:00Z",
   },
   {
     novelId: "4",
     title: "La Leyenda del Guerrero Místico",
-    coverUrl: "/placeholder.jpg?height=240&width=180&text=Novela 4",
+    coverUrl: "/placeholder.svg?height=240&width=180&text=Novela 4",
     addedAt: "2023-04-10T16:20:00Z",
     lastReadChapter: 3,
     progress: 15,
@@ -54,7 +54,7 @@ const mockLibrary: LibraryItem[] = [
   {
     novelId: "5",
     title: "Reinos en Guerra",
-    coverUrl: "/placeholder.jpg?height=240&width=180&text=Novela 5",
+    coverUrl: "/placeholder.svg?height=240&width=180&text=Novela 5",
     addedAt: "2023-05-17T11:30:00Z",
     lastReadChapter: 8,
     progress: 40,
@@ -62,13 +62,13 @@ const mockLibrary: LibraryItem[] = [
   {
     novelId: "6",
     title: "El Despertar de los Dragones",
-    coverUrl: "/placeholder.jpg?height=240&width=180&text=Novela 6",
+    coverUrl: "/placeholder.svg?height=240&width=180&text=Novela 6",
     addedAt: "2023-05-15T09:20:00Z",
   },
   {
     novelId: "7",
     title: "La Espada del Destino",
-    coverUrl: "/placeholder.jpg?height=240&width=180&text=Novela 7",
+    coverUrl: "/placeholder.svg?height=240&width=180&text=Novela 7",
     addedAt: "2023-04-05T14:10:00Z",
     lastReadChapter: 20,
     progress: 80,
@@ -76,7 +76,7 @@ const mockLibrary: LibraryItem[] = [
   {
     novelId: "8",
     title: "Cazadores de Sombras",
-    coverUrl: "/placeholder.jpg?height=240&width=180&text=Novela 8",
+    coverUrl: "/placeholder.svg?height=240&width=180&text=Novela 8",
     addedAt: "2023-05-16T17:45:00Z",
   },
 ]
@@ -277,7 +277,7 @@ export default function UserLibraryPage() {
                         <Link href={`/novel/${item.novelId}`}>
                           <div className="relative aspect-[3/4] w-full">
                             <Image
-                              src={item.coverUrl || "/placeholder.jpg"}
+                              src={item.coverUrl || "/placeholder.svg"}
                               fill
                               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                               alt={item.title}
@@ -397,7 +397,7 @@ export default function UserLibraryPage() {
                       {/* Imagen de portada */}
                       <div className="relative w-full sm:w-auto mx-auto sm:mx-0 max-w-[120px] aspect-[3/4]">
                         <Image
-                          src={item.coverUrl || "/placeholder.jpg"}
+                          src={item.coverUrl || "/placeholder.svg"}
                           fill
                           sizes="(max-width: 640px) 120px, 90px"
                           alt={item.title}

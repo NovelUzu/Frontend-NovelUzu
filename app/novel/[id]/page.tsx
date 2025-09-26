@@ -26,7 +26,7 @@ import { Progress } from "@/components/ui/progress"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
-import { useAuth, type LibraryItem } from "@/lib/auth-context"
+import { useAuth, type LibraryItem } from "@/lib/contexts/auth"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
 
@@ -91,7 +91,7 @@ export default function NovelDetailPage({ params }: { params: Promise<{ id: stri
       const novelInfo: LibraryItem = {
         novelId,
         title: `El Ascenso del Héroe Legendario ${novelId}`,
-        coverUrl: `/placeholder.jpg?height=320&width=240&text=Novela ${novelId}`,
+        coverUrl: `/placeholder.svg?height=320&width=240&text=Novela ${novelId}`,
         addedAt: new Date().toISOString(),
       }
       addToLibrary(novelInfo)
@@ -116,7 +116,7 @@ export default function NovelDetailPage({ params }: { params: Promise<{ id: stri
               {/* Portada de la novela con tamaño adaptativo */}
               <div className="relative mb-4 w-full max-w-[240px]">
                 <Image
-                  src={`/placeholder.jpg?height=320&width=240&text=Novela ${novelId}`}
+                  src={`/placeholder.svg?height=320&width=240&text=Novela ${novelId}`}
                   width={240}
                   height={320}
                   alt={`El Ascenso del Héroe Legendario ${novelId}`}
@@ -348,7 +348,7 @@ export default function NovelDetailPage({ params }: { params: Promise<{ id: stri
                         <div className="flex items-center gap-3">
                           <div className="relative h-10 w-10 overflow-hidden rounded-full flex-shrink-0">
                             <Image
-                              src="/placeholder.jpg?height=40&width=40&text=U"
+                              src="/placeholder.svg?height=40&width=40&text=U"
                               fill
                               alt="Avatar de usuario"
                               className="object-cover"
@@ -381,7 +381,7 @@ export default function NovelDetailPage({ params }: { params: Promise<{ id: stri
                         <div className="flex items-center gap-3">
                           <div className="relative h-10 w-10 overflow-hidden rounded-full flex-shrink-0">
                             <Image
-                              src="/placeholder.jpg?height=40&width=40&text=F"
+                              src="/placeholder.svg?height=40&width=40&text=F"
                               fill
                               alt="Avatar de usuario"
                               className="object-cover"
@@ -431,7 +431,7 @@ export default function NovelDetailPage({ params }: { params: Promise<{ id: stri
                   <Link href={`/novel/${i + 20}`}>
                     <div className="relative aspect-[3/4] w-full">
                       <Image
-                        src={`/placeholder.jpg?height=240&width=180&text=Similar ${i}`}
+                        src={`/placeholder.svg?height=240&width=180&text=Similar ${i}`}
                         fill
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                         alt={`Novela Similar ${i}`}

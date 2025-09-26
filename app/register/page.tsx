@@ -18,7 +18,7 @@ import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/hooks/use-toast"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
-import { useAuth } from "@/lib/auth-context"
+import { useAuth } from "@/lib/contexts/auth"
 
 export default function RegisterPage() {
   const router = useRouter()
@@ -90,12 +90,11 @@ export default function RegisterPage() {
 
     try {
       // Registro con rol de usuario por defecto
-      await register(
-        formData.username,
-        formData.email,
-        formData.password,
-        "usuario", // Todos se registran como usuarios
-      )
+      await register({
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+      })
 
       toast({
         title: "Registro exitoso",

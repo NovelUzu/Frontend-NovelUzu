@@ -15,7 +15,7 @@ import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/hooks/use-toast"
 import { SiteHeader } from "@/components/site-header"
 import { SiteFooter } from "@/components/site-footer"
-import { useAuth } from "@/lib/auth-context"
+import { useAuth } from "@/lib/contexts/auth"
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { useEffect } from "react"
@@ -60,19 +60,18 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      await login(formData.email, formData.password)
+      await login({
+        email: formData.email,
+        password: formData.password
+      })
 
       toast({
         title: "Inicio de sesión exitoso",
         description: "¡Bienvenido de vuelta a NovelUzu!",
       })
 
-      // Redirigir según el tipo de usuario
-      if (formData.email === "admin@noveluzu.com" || formData.email === "admin") {
-        router.push("/admin")
-      } else {
-        router.push("/user/profile")
-      }
+      // Redirigir a la página principal después del login
+      router.push("/")
     } catch (error: any) {
       console.error("Error al iniciar sesión:", error)
       toast({
